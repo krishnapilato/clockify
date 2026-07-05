@@ -99,7 +99,8 @@
         let minTimeUpdateInterval = null;
 
         function toDateTimeLocalValue(date) {
-            // Convert Date to local datetime-local input format (YYYY-MM-DDTHH:mm).
+            // Convert Date to local datetime-local format by shifting UTC ISO time
+            // with getTimezoneOffset (minutes -> milliseconds), then trimming seconds.
             const timezoneOffset = date.getTimezoneOffset() * 60000;
             return new Date(date.getTime() - timezoneOffset).toISOString().slice(0, 16);
         }
@@ -186,7 +187,8 @@
         }
 
         updateMinTime();
-        minTimeUpdateInterval = setInterval(updateMinTime, 30000);
+        alarmInput.addEventListener('focus', updateMinTime);
+        minTimeUpdateInterval = setInterval(updateMinTime, 1000);
         window.addEventListener('beforeunload', () => {
             clearInterval(minTimeUpdateInterval);
         });
