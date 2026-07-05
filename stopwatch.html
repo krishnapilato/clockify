@@ -59,6 +59,7 @@
         <!-- Stopwatch Display -->
         <h1 id="stopwatch" class="text-5xl md:text-6xl font-extrabold mb-3">00:00:00:00</h1>
         <p class="text-sm text-gray-200 mb-8">HH : MM : SS : Centiseconds</p>
+        <p id="stopwatch-status" class="text-sm text-gray-200 mb-6" aria-live="polite"></p>
 
         <!-- Stopwatch Controls -->
         <div class="flex flex-wrap justify-center gap-4">
@@ -81,6 +82,7 @@
     <script>
         const output = document.getElementById('stopwatch');
         const lapList = document.getElementById('lapList');
+        const status = document.getElementById('stopwatch-status');
         let centiseconds = 0;
         let seconds = 0;
         let minutes = 0;
@@ -111,16 +113,19 @@
 
         function start() {
             if (timerInterval) {
+                status.textContent = 'Stopwatch is already running.';
                 return;
             }
             timerInterval = setInterval(updateStopwatch, 10);
             output.classList.remove('blink');
+            status.textContent = 'Stopwatch started.';
         }
 
         function stop() {
             clearInterval(timerInterval);
             timerInterval = null;
             output.classList.add('blink');
+            status.textContent = 'Stopwatch paused.';
         }
 
         function reset() {
@@ -134,6 +139,7 @@
             output.textContent = '00:00:00:00';
             output.classList.remove('blink');
             lapList.innerHTML = '';
+            status.textContent = 'Stopwatch reset.';
         }
 
         function addLap() {
