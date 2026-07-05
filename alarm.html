@@ -89,17 +89,21 @@
         const alarmInput = document.getElementById('alarmTime');
         const alarmSound = new Audio('alarm.mp3');
         alarmSound.loop = true;
+        let canPlaySound = true;
+        alarmSound.addEventListener('error', () => {
+            canPlaySound = false;
+        });
 
         let countdownInterval = null;
         let targetAlarmTime = null;
 
-        function toDatetimeLocalValue(date) {
+        function toDateTimeLocalValue(date) {
             const timezoneOffset = date.getTimezoneOffset() * 60000;
             return new Date(date.getTime() - timezoneOffset).toISOString().slice(0, 16);
         }
 
         function updateMinTime() {
-            alarmInput.min = toDatetimeLocalValue(new Date());
+            alarmInput.min = toDateTimeLocalValue(new Date());
         }
 
         function setControlsForActiveAlarm(isActive) {
@@ -124,6 +128,7 @@
 
             targetAlarmTime = alarmTime;
             alarmStatus.textContent = 'Alarm is active.';
+            cancelButton.textContent = 'Cancel Alarm';
             startCountdown();
             setControlsForActiveAlarm(true);
         });
@@ -136,6 +141,7 @@
             alarmSound.pause();
             alarmSound.currentTime = 0;
             alarmStatus.textContent = 'Alarm cancelled.';
+            cancelButton.textContent = 'Cancel Alarm';
             setControlsForActiveAlarm(false);
         });
 
@@ -164,9 +170,16 @@
 
         function triggerAlarm() {
             alert('Alarm ringing!');
-            alarmSound.play().catch(() => {});
+            if (canPlaySound) {
+                alarmSound.play().catch(() => {});
+            } else {
+                alarmStatus.textContent = 'Alarm time reached (sound unavailable).';
+            }
             countdown.classList.add('hidden');
-            alarmStatus.textContent = 'Alarm is ringing. Click "Cancel Alarm" to stop sound.';
+            if (canPlaySound) {
+                alarmStatus.textContent = 'Alarm is ringing. Click "Stop Alarm" to stop sound.';
+            }
+            cancelButton.textContent = 'Stop Alarm';
             setControlsForActiveAlarm(true);
         }
 
