@@ -29,19 +29,23 @@
             font-family: 'Open Sans', sans-serif;
         }
 
-        .unselectable {
-            user-select: none;
+        .panel {
+            background: rgba(17, 24, 39, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
         }
     </style>
 </head>
 
-<body class="flex flex-col items-center justify-center text-white px-4">
+<body class="min-h-screen flex flex-col items-center justify-center text-white px-4 py-8">
     <header class="mb-8 text-center">
         <h1 class="text-4xl font-bold">Clockify</h1>
         <p class="text-lg mt-2">Set Your Alarm with Ease</p>
     </header>
 
-    <main class="w-full max-w-lg text-center">
+    <main class="w-full max-w-xl text-center panel p-6 md:p-8">
         <div class="mb-6">
             <h2 class="text-2xl font-semibold mb-4">Set Your Alarm</h2>
             <input 
@@ -50,7 +54,8 @@
                 class="w-full p-3 text-black rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400" 
                 required
             >
-            <div id="countdown" class="mt-4 text-xl hidden">Alarm will ring in: <span id="time-left"></span></div>
+            <div id="countdown" class="mt-4 text-xl hidden" aria-live="polite">Alarm will ring in: <span id="time-left" class="font-semibold"></span></div>
+            <p id="alarm-status" class="mt-3 text-sm text-gray-200" aria-live="polite"></p>
         </div>
 
         <div class="flex justify-center gap-4">
@@ -80,10 +85,37 @@
         const cancelButton = document.getElementById('cancelButton');
         const countdown = document.getElementById('countdown');
         const timeLeft = document.getElementById('time-left');
-        let alarmTimer;
+        const alarmStatus = document.getElementById('alarm-status');
+        const alarmInput = document.getElementById('alarmTime');
+        const alarmSound = new Audio('alarm.mp3');
+        alarmSound.loop = true;
+        let canPlaySound = true;
+        alarmSound.addEventListener('error', () => {
+            canPlaySound = false;
+        });
+
+        let countdownInterval = null;
+        let targetAlarmTime = null;
+        let minTimeUpdateInterval = null;
+
+        function toDateTimeLocalValue(date) {
+            // Convert Date to local datetime-local format by shifting UTC ISO time
+            // with getTimezoneOffset (minutes -> milliseconds), then trimming seconds.
+            const timezoneOffset = date.getTimezoneOffset() * 60000; // 60,000 = 60s * 1000ms.
+            return new Date(date.getTime() - timezoneOffset).toISOString().slice(0, 16);
+        }
+
+        function updateMinTime() {
+            alarmInput.min = toDateTimeLocalValue(new Date());
+        }
+
+        function setControlsForActiveAlarm(isActive) {
+            alarmButton.classList.toggle('hidden', isActive);
+            cancelButton.classList.toggle('hidden', !isActive);
+        }
 
         alarmButton.addEventListener('click', () => {
-            const alarmTime = document.getElementById('alarmTime').valueAsNumber;
+            const alarmTime = alarmInput.valueAsNumber;
             if (isNaN(alarmTime)) {
                 alert('Please set a valid time.');
                 return;
@@ -97,50 +129,69 @@
                 return;
             }
 
-            startCountdown(timeDifference);
-
-            alarmButton.classList.add('hidden');
-            cancelButton.classList.remove('hidden');
+            targetAlarmTime = alarmTime;
+            alarmStatus.textContent = 'Alarm is active.';
+            cancelButton.textContent = 'Cancel Alarm';
+            startCountdown();
+            setControlsForActiveAlarm(true);
         });
 
         cancelButton.addEventListener('click', () => {
-            clearTimeout(alarmTimer);
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+            targetAlarmTime = null;
             countdown.classList.add('hidden');
-
-            alarmButton.classList.remove('hidden');
-            cancelButton.classList.add('hidden');
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+            alarmStatus.textContent = 'Alarm cancelled.';
+            cancelButton.textContent = 'Cancel Alarm';
+            setControlsForActiveAlarm(false);
         });
 
-        function startCountdown(duration) {
+        function startCountdown() {
             countdown.classList.remove('hidden');
-
-            let remainingTime = Math.floor(duration / 1000);
+            clearInterval(countdownInterval);
 
             const updateCountdown = () => {
+                const remainingTime = Math.max(0, Math.floor((targetAlarmTime - Date.now()) / 1000));
                 const hours = Math.floor(remainingTime / 3600);
                 const minutes = Math.floor((remainingTime % 3600) / 60);
                 const seconds = remainingTime % 60;
 
-                timeLeft.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                timeLeft.textContent = `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
 
-                if (remainingTime > 0) {
-                    remainingTime -= 1;
-                } else {
-                    clearInterval(alarmTimer);
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
                     triggerAlarm();
                 }
             };
 
             updateCountdown();
-            alarmTimer = setInterval(updateCountdown, 1000);
+            countdownInterval = setInterval(updateCountdown, 1000);
         }
 
         function triggerAlarm() {
             alert('Alarm ringing!');
+            if (canPlaySound) {
+                alarmSound.play().catch(() => {});
+            } else {
+                alarmStatus.textContent = 'Alarm time reached (sound unavailable).';
+            }
             countdown.classList.add('hidden');
-            alarmButton.classList.remove('hidden');
-            cancelButton.classList.add('hidden');
+            if (canPlaySound) {
+                alarmStatus.textContent = 'Alarm is ringing. Click "Stop Alarm" to stop sound.';
+            }
+            cancelButton.textContent = 'Stop Alarm';
+            setControlsForActiveAlarm(true);
         }
+
+        updateMinTime();
+        alarmInput.addEventListener('focus', updateMinTime);
+        minTimeUpdateInterval = setInterval(updateMinTime, 30000);
+        window.addEventListener('beforeunload', () => {
+            clearInterval(minTimeUpdateInterval);
+        });
     </script>
 </body>
 

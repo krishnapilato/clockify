@@ -29,6 +29,14 @@
             font-family: 'Open Sans', sans-serif;
         }
 
+        .panel {
+            background: rgba(17, 24, 39, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+        }
+
         .blink {
             animation: blinker 1s linear infinite;
         }
@@ -50,18 +58,19 @@
     </style>
 </head>
 
-<body class="flex flex-col items-center justify-center text-white px-4">
+<body class="min-h-screen flex flex-col items-center justify-center text-white px-4 py-8">
     <header class="mb-8 text-center">
         <h1 class="text-4xl font-bold">Clockify</h1>
         <p class="text-lg mt-2">Your Ultimate Countdown Timer</p>
     </header>
 
-    <main class="w-full max-w-lg text-center">
+    <main class="w-full max-w-xl text-center panel p-6 md:p-8">
         <!-- Timer Input -->
         <div class="flex justify-center items-center gap-5 mb-6">
             <input type="text" id="min" placeholder="MM" maxlength="2" class="text-5xl w-16 text-center border-b-2 border-white focus:outline-none" onkeypress="return isNumber(event)"> :
             <input type="text" id="sec" placeholder="SS" maxlength="2" class="text-5xl w-16 text-center border-b-2 border-white focus:outline-none" onkeypress="return isNumber(event)">
         </div>
+        <p id="countdown-status" class="text-sm text-gray-200 mb-4" aria-live="polite"></p>
 
         <!-- Timer Display -->
         <h1 id="stopwatch" class="text-6xl font-extrabold mb-10">00:00</h1>
@@ -87,53 +96,110 @@
         const stopBtn = document.getElementById('stopBtn');
         const resetBtn = document.getElementById('resetBtn');
         const output = document.getElementById('stopwatch');
+        const minInput = document.getElementById('min');
+        const secInput = document.getElementById('sec');
+        const status = document.getElementById('countdown-status');
 
-        let time = 0;
-        let timerInterval;
+        let remainingSeconds = 0;
+        let timerInterval = null;
+        const ALARM_SOUND_FILE = 'alarm.mp3';
+        const countdownSound = new Audio(ALARM_SOUND_FILE);
+        countdownSound.loop = false;
+        let canPlaySound = true;
+        countdownSound.addEventListener('error', () => {
+            canPlaySound = false;
+            status.textContent = 'Countdown completed (sound unavailable).';
+        });
 
         function isNumber(evt) {
             const charCode = evt.which || evt.keyCode;
             return !(charCode > 31 && (charCode < 48 || charCode > 57));
         }
 
-        function start() {
-            const minutes = parseInt(document.getElementById('min').value) || 0;
-            const seconds = parseInt(document.getElementById('sec').value) || 0;
-            time = minutes * 60 + seconds;
+        function sanitizeInputs() {
+            let minutes = parseInt(minInput.value, 10);
+            let seconds = parseInt(secInput.value, 10);
 
-            if (time > 0) {
-                clearInterval(timerInterval);
-                timerInterval = setInterval(countdown, 1000);
-                output.classList.remove('blink');
+            if (Number.isNaN(minutes) || minutes < 0) {
+                minutes = 0;
             }
+            if (Number.isNaN(seconds) || seconds < 0) {
+                seconds = 0;
+            }
+            if (seconds > 59) {
+                minutes += Math.floor(seconds / 60);
+                seconds = seconds % 60;
+            }
+            minutes = Math.min(minutes, 5999);
+
+            minInput.value = minutes > 0 ? String(minutes).padStart(2, '0') : '';
+            secInput.value = seconds > 0 ? String(seconds).padStart(2, '0') : '';
+            return (minutes * 60) + seconds;
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            output.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function start() {
+            if (timerInterval) {
+                return;
+            }
+
+            if (remainingSeconds <= 0) {
+                remainingSeconds = sanitizeInputs();
+                if (remainingSeconds <= 0) {
+                    status.textContent = 'Enter a valid duration to start.';
+                    status.classList.add('text-red-200');
+                    return;
+                }
+            }
+
+            updateDisplay();
+            status.classList.remove('text-red-200');
+            status.textContent = 'Countdown is running.';
+            output.classList.remove('blink');
+            timerInterval = setInterval(countdown, 1000);
         }
 
         function stop() {
             clearInterval(timerInterval);
+            timerInterval = null;
             output.classList.add('blink');
+            status.textContent = remainingSeconds > 0 ? 'Countdown paused.' : '';
         }
 
         function reset() {
             clearInterval(timerInterval);
-            time = 0;
+            timerInterval = null;
+            remainingSeconds = 0;
             output.textContent = '00:00';
-            document.getElementById('min').value = '';
-            document.getElementById('sec').value = '';
+            minInput.value = '';
+            secInput.value = '';
             output.classList.remove('blink');
+            status.classList.remove('text-red-200');
+            status.textContent = 'Countdown reset.';
+            countdownSound.pause();
+            countdownSound.currentTime = 0;
         }
 
         function countdown() {
-            if (time <= 0) {
+            if (remainingSeconds <= 0) {
                 clearInterval(timerInterval);
+                timerInterval = null;
                 output.textContent = '00:00';
                 output.classList.add('blink');
+                status.textContent = 'Time is up!';
+                if (canPlaySound) {
+                    countdownSound.play().catch(() => {});
+                }
                 return;
             }
 
-            time--;
-            const minutes = Math.floor(time / 60);
-            const seconds = time % 60;
-            output.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            remainingSeconds--;
+            updateDisplay();
         }
 
         startBtn.addEventListener('click', start);
