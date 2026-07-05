@@ -58,7 +58,7 @@
     <main class="w-full max-w-xl text-center panel p-6 md:p-8">
         <!-- Stopwatch Display -->
         <h1 id="stopwatch" class="text-5xl md:text-6xl font-extrabold mb-3">00:00:00:00</h1>
-        <p class="text-sm text-gray-200 mb-8">HH : MM : SS : Centiseconds</p>
+        <p class="text-sm text-gray-200 mb-8">HH : MM : SS : centiseconds</p>
         <p id="stopwatch-status" class="text-sm text-gray-200 mb-6" aria-live="polite"></p>
 
         <!-- Stopwatch Controls -->
@@ -144,6 +144,7 @@
 
         function addLap() {
             if (!timerInterval && hours === 0 && minutes === 0 && seconds === 0 && centiseconds === 0) {
+                status.textContent = 'Start the stopwatch before recording laps.';
                 return;
             }
             lapCount++;
