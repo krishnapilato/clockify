@@ -104,6 +104,11 @@
         let timerInterval = null;
         const countdownSound = new Audio('alarm.mp3');
         countdownSound.loop = false;
+        let canPlaySound = true;
+        countdownSound.addEventListener('error', () => {
+            canPlaySound = false;
+            status.textContent = 'Countdown completed (sound unavailable).';
+        });
 
         function isNumber(evt) {
             const charCode = evt.which || evt.keyCode;
@@ -145,11 +150,13 @@
                 remainingSeconds = sanitizeInputs();
                 if (remainingSeconds <= 0) {
                     status.textContent = 'Enter a valid duration to start.';
+                    status.classList.add('text-red-200');
                     return;
                 }
             }
 
             updateDisplay();
+            status.classList.remove('text-red-200');
             status.textContent = 'Countdown is running.';
             output.classList.remove('blink');
             timerInterval = setInterval(countdown, 1000);
@@ -170,6 +177,7 @@
             minInput.value = '';
             secInput.value = '';
             output.classList.remove('blink');
+            status.classList.remove('text-red-200');
             status.textContent = 'Countdown reset.';
             countdownSound.pause();
             countdownSound.currentTime = 0;
@@ -182,7 +190,9 @@
                 output.textContent = '00:00';
                 output.classList.add('blink');
                 status.textContent = 'Time is up!';
-                countdownSound.play().catch(() => {});
+                if (canPlaySound) {
+                    countdownSound.play().catch(() => {});
+                }
                 return;
             }
 
