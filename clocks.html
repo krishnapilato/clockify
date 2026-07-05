@@ -29,36 +29,50 @@
             font-family: 'Open Sans', sans-serif;
         }
 
-        .unselectable {
-            user-select: none;
+        .panel {
+            background: rgba(17, 24, 39, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+        }
+
+        .city-btn {
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .city-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .2);
         }
     </style>
 </head>
 
-<body class="flex flex-col items-center justify-center text-white px-4">
+<body class="min-h-screen flex flex-col items-center justify-center text-white px-4 py-8">
     <header class="mb-8 text-center">
         <h1 class="text-4xl font-bold">Clockify</h1>
         <p class="text-lg mt-2">Discover Time Across the Globe</p>
     </header>
 
-    <main class="w-full max-w-lg text-center">
+    <main class="w-full max-w-2xl text-center panel p-6 md:p-8">
         <!-- City List -->
         <div class="mb-6">
             <h2 class="text-2xl font-semibold mb-4">Select a City</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('New York', -5)">New York</button>
-                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('London', 0)">London</button>
-                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Tokyo', 9)">Tokyo</button>
-                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Sydney', 11)">Sydney</button>
-                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Mumbai', 5.5)">Mumbai</button>
-                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Dubai', 4)">Dubai</button>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('New York', 'America/New_York')">New York</button>
+                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('London', 'Europe/London')">London</button>
+                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Tokyo', 'Asia/Tokyo')">Tokyo</button>
+                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Sydney', 'Australia/Sydney')">Sydney</button>
+                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Mumbai', 'Asia/Kolkata')">Mumbai</button>
+                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Dubai', 'Asia/Dubai')">Dubai</button>
             </div>
         </div>
 
         <!-- Display Selected City Time -->
         <div id="city-time" class="text-center mt-8">
             <h2 id="city-name" class="text-3xl font-bold"></h2>
-            <p id="local-time" class="text-6xl font-extrabold leading-none"></p>
+            <p id="local-time" class="text-5xl md:text-6xl font-extrabold leading-none mt-2"></p>
+            <p id="city-date" class="text-lg mt-3 text-gray-200"></p>
         </div>
     </main>
 
@@ -71,33 +85,40 @@
     </footer>
 
     <script>
-        let timeInterval; // Global variable to store the interval ID
+        let timeInterval;
+        let selectedTimeZone = '';
 
-        function showTime(city, offset) {
-            // Clear the previous interval if it exists
+        function showTime(city, timeZone) {
             if (timeInterval) {
                 clearInterval(timeInterval);
             }
+            selectedTimeZone = timeZone;
 
-            // Set city name
             document.getElementById('city-name').textContent = `Current Time in ${city}`;
 
             const updateTime = () => {
                 const now = new Date();
-                const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-                const localTime = new Date(utc + (3600000 * offset));
-                document.getElementById('local-time').textContent = localTime.toLocaleTimeString('en-US', {
+                document.getElementById('local-time').textContent = now.toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                     second: '2-digit',
-                    hour12: true
+                    hour12: true,
+                    timeZone: selectedTimeZone
+                });
+                document.getElementById('city-date').textContent = now.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                    timeZone: selectedTimeZone
                 });
             };
 
-            // Update time immediately and then start the interval
             updateTime();
             timeInterval = setInterval(updateTime, 1000);
         }
+
+        showTime('New York', 'America/New_York');
     </script>
 
 </body>

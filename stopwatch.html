@@ -29,6 +29,14 @@
             font-family: 'Open Sans', sans-serif;
         }
 
+        .panel {
+            background: rgba(17, 24, 39, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+        }
+
         .blink {
             animation: blinker 1s linear infinite;
         }
@@ -41,22 +49,25 @@
     </style>
 </head>
 
-<body class="flex flex-col items-center justify-center text-white px-4">
+<body class="min-h-screen flex flex-col items-center justify-center text-white px-4 py-8">
     <header class="mb-8 text-center">
         <h1 class="text-4xl font-bold">Clockify</h1>
         <p class="text-lg mt-2">Your Ultimate Stopwatch Application</p>
     </header>
 
-    <main class="w-full max-w-lg text-center">
+    <main class="w-full max-w-xl text-center panel p-6 md:p-8">
         <!-- Stopwatch Display -->
-        <h1 id="stopwatch" class="text-7xl font-extrabold mb-10">00:00:00</h1>
+        <h1 id="stopwatch" class="text-5xl md:text-6xl font-extrabold mb-3">00:00:00:00</h1>
+        <p class="text-sm text-gray-200 mb-8">HH : MM : SS : CS</p>
 
         <!-- Stopwatch Controls -->
-        <div class="flex justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <button id="startBtn" class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600">Start</button>
             <button id="stopBtn" class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Stop</button>
             <button id="resetBtn" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600">Reset</button>
+            <button id="lapBtn" class="px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600">Lap</button>
         </div>
+        <ol id="lapList" class="mt-8 max-h-40 overflow-auto text-left space-y-2"></ol>
     </main>
 
     <footer class="mt-10 flex flex-wrap justify-center gap-4">
@@ -69,49 +80,77 @@
 
     <script>
         const output = document.getElementById('stopwatch');
-        let ms = 0;
-        let sec = 0;
-        let min = 0;
-        let timerInterval;
+        const lapList = document.getElementById('lapList');
+        let centiseconds = 0;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+        let timerInterval = null;
+        let lapCount = 0;
+
+        function formatTime() {
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(centiseconds).padStart(2, '0')}`;
+        }
 
         function updateStopwatch() {
-            ms++;
-            if (ms >= 100) {
-                sec++;
-                ms = 0;
+            centiseconds++;
+            if (centiseconds >= 100) {
+                seconds++;
+                centiseconds = 0;
             }
-            if (sec === 60) {
-                min++;
-                sec = 0;
+            if (seconds === 60) {
+                minutes++;
+                seconds = 0;
             }
-
-            const formattedTime = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}:${String(ms).padStart(2, '0')}`;
-            output.textContent = formattedTime;
+            if (minutes === 60) {
+                hours++;
+                minutes = 0;
+            }
+            output.textContent = formatTime();
         }
 
         function start() {
-            clearInterval(timerInterval);
+            if (timerInterval) {
+                return;
+            }
             timerInterval = setInterval(updateStopwatch, 10);
             output.classList.remove('blink');
         }
 
         function stop() {
             clearInterval(timerInterval);
+            timerInterval = null;
             output.classList.add('blink');
         }
 
         function reset() {
             clearInterval(timerInterval);
-            ms = 0;
-            sec = 0;
-            min = 0;
-            output.textContent = '00:00:00';
+            timerInterval = null;
+            centiseconds = 0;
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            lapCount = 0;
+            output.textContent = '00:00:00:00';
             output.classList.remove('blink');
+            lapList.innerHTML = '';
+        }
+
+        function addLap() {
+            if (!timerInterval && hours === 0 && minutes === 0 && seconds === 0 && centiseconds === 0) {
+                return;
+            }
+            lapCount++;
+            const lapItem = document.createElement('li');
+            lapItem.className = 'bg-white/20 rounded-lg px-3 py-2';
+            lapItem.textContent = `Lap ${lapCount}: ${formatTime()}`;
+            lapList.prepend(lapItem);
         }
 
         document.getElementById('startBtn').addEventListener('click', start);
         document.getElementById('stopBtn').addEventListener('click', stop);
         document.getElementById('resetBtn').addEventListener('click', reset);
+        document.getElementById('lapBtn').addEventListener('click', addLap);
     </script>
 </body>
 
