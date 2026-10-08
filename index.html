@@ -3,192 +3,65 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Clockify is a simple clock with world clocks, an alarm, a stopwatch and a countdown.">
+    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano">
     <title>Clockify</title>
-    <link rel="shortcut icon" href="http://cdn.onlinewebfonts.com/svg/img_461716.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        body {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            height: 100vh;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        .unselectable {
-            user-select: none;
-        }
-
-        /* Progress bar styles */
-        #progress-bar-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.3);
-            z-index: 9999;
-            overflow: hidden;
-        }
-
-        #progress-bar {
-            height: 100%;
-            width: 0;
-            background-color: #23a6d5;
-            transition: width 0.2s ease-in-out;
-        }
-
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 9998;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="unselectable flex flex-col items-center justify-center text-white px-4">
-    <!-- Preloader -->
-    <div id="preloader">
-        <div>Loading...</div>
-    </div>
+<body class="user-select-none home" oncontextmenu="return false">
+    <main class="page">
+        <h1><img src="icon.svg" alt="" width="40" height="40"> Clockify</h1>
 
-    <!-- Progress Bar -->
-    <div id="progress-bar-container">
-        <div id="progress-bar"></div>
-    </div>
+        <p class="display" id="time">00:00:00</p>
+        <svg class="clock d-none" id="analog" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="96" />
+            <text x="100" y="28">12</text>
+            <text x="172" y="100">3</text>
+            <text x="100" y="172">6</text>
+            <text x="28" y="100">9</text>
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(30 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(60 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(120 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(150 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(210 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(240 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(300 100 100)" />
+            <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(330 100 100)" />
+            <line id="hour-hand" x1="100" y1="100" x2="100" y2="60" />
+            <line id="minute-hand" x1="100" y1="100" x2="100" y2="42" />
+            <line id="second-hand" x1="100" y1="116" x2="100" y2="38" />
+        </svg>
+        <p class="fs-5" id="date"></p>
 
-    <header class="mb-8">
-        <h1 class="text-4xl font-bold text-center">Clockify</h1>
-        <p class="text-lg text-center mt-2">Your Ultimate Time Management Companion</p>
-    </header>
+        <button class="btn btn-light" id="toggle" type="button">
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i> Switch style
+        </button>
 
-    <main class="w-full max-w-lg">
-        <!-- Analog Clock -->
-        <div id="analog-clock" class="relative w-64 h-64 mx-auto hidden">
-            <div class="absolute inset-0 flex items-center justify-center bg-gray-700 rounded-full">
-                <div class="hour absolute w-16 h-1 bg-gray-300 origin-bottom" id="hr"></div>
-                <div class="min absolute w-20 h-1 bg-gray-400 origin-bottom" id="mn"></div>
-                <div class="sec absolute w-24 h-0.5 bg-red-500 origin-bottom" id="sc"></div>
-            </div>
-        </div>
+        <ul class="row row-cols-2 row-cols-md-4 g-3 w-100 list-unstyled">
+            <li class="col">
+                <a class="tile clocks" href="clocks.html"><i class="bi bi-globe-americas" aria-hidden="true"></i> World clocks</a>
+            </li>
+            <li class="col">
+                <a class="tile alarm" href="alarm.html"><i class="bi bi-alarm" aria-hidden="true"></i> Alarm</a>
+            </li>
+            <li class="col">
+                <a class="tile stopwatch" href="stopwatch.html"><i class="bi bi-stopwatch" aria-hidden="true"></i> Stopwatch</a>
+            </li>
+            <li class="col">
+                <a class="tile countdown" href="countdown.html"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Countdown</a>
+            </li>
+        </ul>
 
-        <!-- Digital Clock -->
-        <div id="digital-clock" class="text-center text-6xl font-bold mt-8">
-            <span id="time"></span>
-        </div>
+        <p class="small">Made by Khova Krishna Pilato and Pasquale Marciano in Sept 2021</p>
     </main>
 
-    <footer class="flex flex-wrap justify-center gap-4 mt-10">
-        <a href="alarm.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow-lg hover:bg-gray-200">
-            Alarm
-        </a>
-        <a href="clocks.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow-lg hover:bg-gray-200">
-            Clocks
-        </a>
-        <button id="style" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow-lg hover:bg-gray-200">
-            Toggle Style
-        </button>
-        <a href="stopwatch.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow-lg hover:bg-gray-200">
-            Stopwatch
-        </a>
-        <a href="countdown.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow-lg hover:bg-gray-200">
-            Countdown
-        </a>
-    </footer>
-
-    <script>
-        // Show progress bar while loading
-        const progressBar = document.getElementById("progress-bar");
-        let progress = 0;
-
-        const interval = setInterval(() => {
-            progress += 10;
-            if (progress <= 100) {
-                progressBar.style.width = `${progress}%`;
-            } else {
-                clearInterval(interval);
-            }
-        }, 200);
-
-        // Hide preloader and progress bar when the page is fully loaded
-        window.addEventListener("load", () => {
-            clearInterval(interval);
-            progressBar.style.width = "100%";
-            setTimeout(() => {
-                document.getElementById("preloader").classList.add("hidden");
-                document.getElementById("progress-bar-container").classList.add("hidden");
-            }, 500); // Allow progress bar to finish animation
-        });
-
-        // Update digital clock
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById("time").innerHTML = `${String(now.getHours()).padStart(2, '0')} : ${String(now.getMinutes()).padStart(2, '0')} : ${String(now.getSeconds()).padStart(2, '0')}`;
-        }, 1000);
-
-        // Analog clock
-        const DEG = 6;
-        const hr = document.querySelector('#hr');
-        const mn = document.querySelector('#mn');
-        const sc = document.querySelector('#sc');
-
-        setInterval(() => {
-            const now = new Date();
-            const hh = now.getHours() * 30;
-            const mm = now.getMinutes() * DEG;
-            const ss = now.getSeconds() * DEG;
-
-            hr.style.transform = `rotateZ(${hh + (mm / 12)}deg)`;
-            mn.style.transform = `rotateZ(${mm}deg)`;
-            sc.style.transform = `rotateZ(${ss}deg)`;
-        }, 1000);
-
-        // Style toggle
-        let styleFlag = "digital";
-
-        document.getElementById("style").addEventListener("click", () => {
-            const digitalClock = document.getElementById("digital-clock");
-            const analogClock = document.getElementById("analog-clock");
-
-            if (styleFlag === "digital") {
-                digitalClock.classList.add("hidden");
-                analogClock.classList.remove("hidden");
-                styleFlag = "analog";
-            } else {
-                analogClock.classList.add("hidden");
-                digitalClock.classList.remove("hidden");
-                styleFlag = "digital";
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
