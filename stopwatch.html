@@ -3,162 +3,41 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clockify</title>
-    <link rel="shortcut icon" href="http://cdn.onlinewebfonts.com/svg/img_461716.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        body {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            height: 100vh;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        .panel {
-            background: rgba(17, 24, 39, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
-        }
-
-        .blink {
-            animation: blinker 1s linear infinite;
-        }
-
-        @keyframes blinker {
-            50% {
-                opacity: 0;
-            }
-        }
-    </style>
+    <meta name="description" content="Measure time and save laps with the stopwatch.">
+    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano">
+    <title>Stopwatch - Clockify</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center text-white px-4 py-8">
-    <header class="mb-8 text-center">
-        <h1 class="text-4xl font-bold">Clockify</h1>
-        <p class="text-lg mt-2">Your Ultimate Stopwatch Application</p>
-    </header>
+<body class="stopwatch user-select-none" oncontextmenu="return false">
+    <main class="page">
+        <a class="btn btn-light back" href="index.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> Home</a>
 
-    <main class="w-full max-w-xl text-center panel p-6 md:p-8">
-        <!-- Stopwatch Display -->
-        <h1 id="stopwatch" class="text-5xl md:text-6xl font-extrabold mb-3">00:00:00:00</h1>
-        <p class="text-sm text-gray-200 mb-8">HH : MM : SS : centiseconds</p>
-        <p id="stopwatch-status" class="text-sm text-gray-200 mb-6" aria-live="polite"></p>
+        <h1><i class="bi bi-stopwatch" aria-hidden="true"></i> Stopwatch</h1>
 
-        <!-- Stopwatch Controls -->
-        <div class="flex flex-wrap justify-center gap-4">
-            <button id="startBtn" class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600">Start</button>
-            <button id="stopBtn" class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Stop</button>
-            <button id="resetBtn" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600">Reset</button>
-            <button id="lapBtn" class="px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600">Lap</button>
+        <p class="display" id="time" role="timer">00:00:00.00</p>
+
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button class="btn btn-primary" id="start" type="button">
+                <i class="bi bi-play-fill" aria-hidden="true"></i> Start
+            </button>
+            <button class="btn btn-light" id="lap" type="button" disabled>
+                <i class="bi bi-flag" aria-hidden="true"></i> Lap
+            </button>
+            <button class="btn btn-light" id="reset" type="button">
+                <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset
+            </button>
         </div>
-        <ol id="lapList" class="mt-8 max-h-40 overflow-auto text-left space-y-2"></ol>
+
+        <ol class="list-group col-10 col-sm-6" id="laps" aria-label="Laps" aria-live="polite"></ol>
     </main>
 
-    <footer class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href="alarm.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Alarm</a>
-        <a href="clocks.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Clocks</a>
-        <a href="index.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Home</a>
-        <a href="stopwatch.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-blue-600">Stopwatch</a>
-        <a href="countdown.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Countdown</a>
-    </footer>
-
-    <script>
-        const output = document.getElementById('stopwatch');
-        const lapList = document.getElementById('lapList');
-        const status = document.getElementById('stopwatch-status');
-        let centiseconds = 0;
-        let seconds = 0;
-        let minutes = 0;
-        let hours = 0;
-        let timerInterval = null;
-        let lapCount = 0;
-
-        function formatTime() {
-            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(centiseconds).padStart(2, '0')}`;
-        }
-
-        function updateStopwatch() {
-            centiseconds++;
-            if (centiseconds >= 100) {
-                seconds++;
-                centiseconds = 0;
-            }
-            if (seconds === 60) {
-                minutes++;
-                seconds = 0;
-            }
-            if (minutes === 60) {
-                hours++;
-                minutes = 0;
-            }
-            output.textContent = formatTime();
-        }
-
-        function start() {
-            if (timerInterval) {
-                status.textContent = 'Stopwatch is already running.';
-                return;
-            }
-            timerInterval = setInterval(updateStopwatch, 10);
-            output.classList.remove('blink');
-            status.textContent = 'Stopwatch started.';
-        }
-
-        function stop() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            output.classList.add('blink');
-            status.textContent = 'Stopwatch paused.';
-        }
-
-        function reset() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            centiseconds = 0;
-            seconds = 0;
-            minutes = 0;
-            hours = 0;
-            lapCount = 0;
-            output.textContent = '00:00:00:00';
-            output.classList.remove('blink');
-            lapList.innerHTML = '';
-            status.textContent = 'Stopwatch reset.';
-        }
-
-        function addLap() {
-            if (!timerInterval && hours === 0 && minutes === 0 && seconds === 0 && centiseconds === 0) {
-                status.textContent = 'Start the stopwatch before recording laps.';
-                return;
-            }
-            lapCount++;
-            const lapItem = document.createElement('li');
-            lapItem.className = 'bg-white/20 rounded-lg px-3 py-2';
-            lapItem.textContent = `Lap ${lapCount}: ${formatTime()}`;
-            lapList.prepend(lapItem);
-        }
-
-        document.getElementById('startBtn').addEventListener('click', start);
-        document.getElementById('stopBtn').addEventListener('click', stop);
-        document.getElementById('resetBtn').addEventListener('click', reset);
-        document.getElementById('lapBtn').addEventListener('click', addLap);
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

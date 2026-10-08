@@ -1,0 +1,201 @@
+@use "sass:color";
+
+$ink: #1f2440;
+$blue: #3b5bdb;
+$teal: #0b7285;
+$pink: #d6336c;
+$violet: #7048e8;
+$orange: #c2500a;
+
+@mixin theme($color) {
+  --accent: #{$color};
+  --accent-dark: #{color.scale($color, $lightness: -25%)};
+  --accent-light: #{color.change($color, $lightness: 93%)};
+}
+
+@mixin button($background, $text) {
+  --bs-btn-bg: #{$background};
+  --bs-btn-color: #{$text};
+  --bs-btn-hover-bg: #{$background};
+  --bs-btn-hover-color: #{$text};
+  --bs-btn-disabled-bg: #{$background};
+  --bs-btn-disabled-color: #{$text};
+  --bs-btn-active-bg: var(--accent-dark);
+  --bs-btn-active-color: #fff;
+}
+
+.home {
+  @include theme($blue);
+}
+
+.clocks {
+  @include theme($teal);
+}
+
+.alarm {
+  @include theme($pink);
+}
+
+.stopwatch {
+  @include theme($violet);
+}
+
+.countdown {
+  @include theme($orange);
+}
+
+body {
+  background: var(--accent-light);
+  color: $ink;
+  font-family: "Outfit", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+h1 {
+  color: var(--accent-dark);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 45rem;
+  margin: auto;
+  padding: 5rem 1rem 3rem;
+  text-align: center;
+
+  > * {
+    margin-bottom: 0;
+  }
+}
+
+.back {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.display {
+  padding: 0.1em 0.3em;
+  border-radius: 0.3em;
+  color: var(--accent-dark);
+  font-size: clamp(2.5rem, 13vw, 7rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ringing .display {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn {
+  padding: 0.7rem 1.4rem;
+  border: 0;
+  border-radius: 2rem;
+  font-weight: 500;
+
+  &:hover {
+    filter: brightness(0.94);
+  }
+}
+
+.btn-primary {
+  @include button(var(--accent), #fff);
+}
+
+.btn-light {
+  @include button(#fff, var(--accent-dark));
+}
+
+.form-control {
+  border: 2px solid var(--accent);
+  border-radius: 1rem;
+}
+
+.list-group {
+  --bs-list-group-color: #{$ink};
+  --bs-list-group-border-color: var(--accent-light);
+  --bs-list-group-border-radius: 1rem;
+}
+
+a:focus-visible,
+.btn:focus-visible,
+.btn-check:focus-visible + .btn,
+.form-control:focus {
+  border-color: var(--accent);
+  outline: 3px solid var(--accent-dark);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.tile {
+  display: block;
+  padding: 1.5rem 0.5rem;
+  border-radius: 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+
+  i {
+    display: block;
+    font-size: 2rem;
+  }
+
+  &:hover {
+    background: var(--accent-dark);
+  }
+}
+
+.clock {
+  width: min(70vw, 16rem);
+  fill: $ink;
+  stroke: $ink;
+  stroke-width: 5;
+  stroke-linecap: round;
+
+  circle {
+    fill: #fff;
+    stroke: none;
+  }
+
+  text {
+    stroke: none;
+    font-size: 18px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .tick {
+    stroke-width: 2;
+  }
+
+  #second-hand {
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+}
+
+@keyframes ring {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  .ringing .display {
+    animation: ring 1s infinite;
+  }
+}

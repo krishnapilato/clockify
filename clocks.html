@@ -3,124 +3,44 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clockify - World Clocks</title>
-    <link rel="shortcut icon" href="http://cdn.onlinewebfonts.com/svg/img_461716.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        body {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            height: 100vh;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        .panel {
-            background: rgba(17, 24, 39, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
-        }
-
-        .city-btn {
-            transition: transform .15s ease, box-shadow .15s ease;
-        }
-
-        .city-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, .2);
-        }
-    </style>
+    <meta name="description" content="See the current time in cities around the world.">
+    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano">
+    <title>World clocks - Clockify</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center text-white px-4 py-8">
-    <header class="mb-8 text-center">
-        <h1 class="text-4xl font-bold">Clockify</h1>
-        <p class="text-lg mt-2">Discover Time Across the Globe</p>
-    </header>
+<body class="clocks user-select-none" oncontextmenu="return false">
+    <main class="page">
+        <a class="btn btn-light back" href="index.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> Home</a>
 
-    <main class="w-full max-w-2xl text-center panel p-6 md:p-8">
-        <!-- City List -->
-        <div class="mb-6">
-            <h2 class="text-2xl font-semibold mb-4">Select a City</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('New York', 'America/New_York')">New York</button>
-                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('London', 'Europe/London')">London</button>
-                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Tokyo', 'Asia/Tokyo')">Tokyo</button>
-                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Sydney', 'Australia/Sydney')">Sydney</button>
-                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Mumbai', 'Asia/Kolkata')">Mumbai</button>
-                <button class="city-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200" onclick="showTime('Dubai', 'Asia/Dubai')">Dubai</button>
-            </div>
-        </div>
+        <h1><i class="bi bi-globe-americas" aria-hidden="true"></i> World clocks</h1>
 
-        <!-- Display Selected City Time -->
-        <div id="city-time" class="text-center mt-8">
-            <h2 id="city-name" class="text-3xl font-bold"></h2>
-            <p id="local-time" class="text-5xl md:text-6xl font-extrabold leading-none mt-2"></p>
-            <p id="city-date" class="text-lg mt-3 text-gray-200"></p>
-        </div>
+        <p class="display" id="time">00:00:00</p>
+        <p class="fs-5" id="date"></p>
+
+        <fieldset class="d-flex flex-wrap justify-content-center gap-2" id="cities">
+            <legend class="visually-hidden">City</legend>
+            <input class="btn-check" type="radio" name="city" id="new-york" value="America/New_York" checked>
+            <label class="btn btn-light" for="new-york">New York</label>
+            <input class="btn-check" type="radio" name="city" id="london" value="Europe/London">
+            <label class="btn btn-light" for="london">London</label>
+            <input class="btn-check" type="radio" name="city" id="dubai" value="Asia/Dubai">
+            <label class="btn btn-light" for="dubai">Dubai</label>
+            <input class="btn-check" type="radio" name="city" id="mumbai" value="Asia/Kolkata">
+            <label class="btn btn-light" for="mumbai">Mumbai</label>
+            <input class="btn-check" type="radio" name="city" id="tokyo" value="Asia/Tokyo">
+            <label class="btn btn-light" for="tokyo">Tokyo</label>
+            <input class="btn-check" type="radio" name="city" id="sydney" value="Australia/Sydney">
+            <label class="btn btn-light" for="sydney">Sydney</label>
+        </fieldset>
     </main>
 
-    <footer class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href="alarm.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Alarm</a>
-        <a href="clocks.html" class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">Clocks</a>
-        <a href="index.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Home</a>
-        <a href="stopwatch.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Stopwatch</a>
-        <a href="countdown.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg shadow hover:bg-gray-200">Countdown</a>
-    </footer>
-
-    <script>
-        let timeInterval;
-        let selectedTimeZone = '';
-
-        function showTime(city, timeZone) {
-            if (timeInterval) {
-                clearInterval(timeInterval);
-            }
-            selectedTimeZone = timeZone;
-
-            document.getElementById('city-name').textContent = `Current Time in ${city}`;
-
-            const updateTime = () => {
-                const now = new Date();
-                document.getElementById('local-time').textContent = now.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true,
-                    timeZone: selectedTimeZone
-                });
-                document.getElementById('city-date').textContent = now.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                    timeZone: selectedTimeZone
-                });
-            };
-
-            updateTime();
-            timeInterval = setInterval(updateTime, 1000);
-        }
-
-        showTime('New York', 'America/New_York');
-    </script>
-
+    <script src="script.js"></script>
 </body>
 
 </html>

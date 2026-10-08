@@ -1,59 +1,112 @@
-# Clockify - Project Overview
+# Clockify
 
-Clockify is a simple yet feature-rich project centered around clocks and their functionalities, including an alarm, countdown timer, and stopwatch. This project is a part of our internship experience, developed by a dedicated team of two within two days. We aim to enhance this project progressively, improving its usability and resolving any bugs.
+Clockify is a simple clock app with world clocks, an alarm, a stopwatch and a countdown.
+
+**Live preview: [krishnapilato.github.io/clockify](https://krishnapilato.github.io/clockify/)**
+
+![Clockify home page](screenshots/home.png)
+
+This project is part of our internship experience. We were a team of two and we made the first version in two days. We keep improving it step by step.
+
+Made by Khova Krishna Pilato and Pasquale Marciano in Sept 2021. Keeping project updated.
 
 ---
 
-## Technologies Used 🛠️
+## Technologies Used
 
 - **HTML5**
-- **CSS3**
+- **SCSS** (compiled to CSS)
 - **JavaScript**
-- **Tailwind CSS**
+- **Bootstrap 5.3.8**
+- **Bootstrap Icons**
 
 ---
 
-## Features Overview 📖
+## Features Overview
 
-### **1. Homepage (`index.html`)**
-The homepage features a **dynamic clock** that switches between digital and analog styles when you click the **toggle style** button. It's a simple but interactive entry point to explore the app's functionality.
+### 1. Homepage (`index.html`)
 
----
+The homepage shows the current time and date. The **Switch style** button changes the clock from digital to analog. The analog clock is an SVG. The four colored tiles open the other pages.
 
-### **2. Alarm System (`alarm.html`)**
-The alarm system allows you to:
+![Analog clock](screenshots/analog.png)
+
+### 2. World Clocks (`clocks.html`)
+
+Pick a city to see its time and date: New York, London, Dubai, Mumbai, Tokyo or Sydney.
+
+![World clocks](screenshots/clocks.png)
+
+### 3. Alarm (`alarm.html`)
+
 - Set a future date and time.
-- View the countdown to the alarm in **hours, minutes, and seconds**.
-- Cancel the alarm if needed.
+- See how much time is left in **hours, minutes and seconds**.
+- Cancel the alarm if you change your mind.
 
-When the alarm rings, a notification is displayed. The design includes user-friendly buttons and a clean interface for seamless operation.
+When the time comes the alarm plays a sound and the clock is highlighted until you stop it. Keep the page open, the alarm only works while the page is open.
 
----
+![Alarm](screenshots/alarm.png)
 
-### **3. Stopwatch (`stopwatch.html`)**
-The stopwatch tracks time with:
-- **Minutes**
-- **Seconds**
-- **Milliseconds**
+### 4. Stopwatch (`stopwatch.html`)
 
-You can start, stop, and reset the timer at your convenience. Future updates will include extended tracking for **hours**.
+Start, pause and reset the timer. It shows **hours, minutes, seconds and hundredths**. The **Lap** button saves the current time in a list.
 
----
+![Stopwatch](screenshots/stopwatch.png)
 
-### **4. Countdown Timer (`countdown.html`)**
-Set your desired countdown duration in minutes and seconds or use the default **2-minute timer**. Like the stopwatch, the countdown allows you to start, pause, and reset the timer easily.
+### 5. Countdown (`countdown.html`)
 
----
+Write the minutes and seconds or use the default **2 minutes**. You can start, pause and reset. A sound plays when the time is up.
 
-## Planned Improvements 🚀
+![Countdown](screenshots/countdown.png)
 
-- **Enhanced UI/UX**: Refined visuals and interactions.
-- **Accessibility Features**: Making the app more inclusive.
-- **Bug Fixes and Optimizations**: Addressing known issues and improving performance.
-- **Additional Functionality**: Adding features like custom themes, audio alerts, and more.
+### Works on the phone too
+
+<img src="screenshots/mobile.png" alt="Clockify on a phone" width="280">
 
 ---
 
-## Contact Us 📧
+## Files
 
-We welcome feedback, suggestions, and ideas! Stay tuned as we continue to enhance Clockify with new features and improvements.
+| File | What is inside |
+| --- | --- |
+| `index.html`, `clocks.html`, `alarm.html`, `stopwatch.html`, `countdown.html` | One HTML file for every page |
+| `style.scss` | The style of all the pages (colors, buttons, clock) |
+| `style.css` | The CSS made from `style.scss`, this is the file the pages load |
+| `script.js` | The JavaScript of all the pages, with the functions they share |
+| `icon.svg` | The app icon |
+| `alarm.mp3` | The alarm sound |
+| `screenshots/` | The images of this README |
+
+---
+
+## How to Run It
+
+Open `index.html` in the browser. There is nothing to install.
+
+If you change `style.scss` you have to build the CSS again:
+
+```bash
+npx sass --no-source-map style.scss style.css
+```
+
+---
+
+## Accessibility
+
+- Every page works with the keyboard and the focus is always visible.
+- The colors have enough contrast for the text.
+- Screen readers get the messages of the alarm and the countdown.
+- The animations are turned off if the system asks for less motion.
+
+---
+
+## Planned Improvements
+
+- Keep the alarm after the page is closed.
+- Let the user add more cities.
+- Choose the alarm sound.
+
+---
+
+## Contact Us
+
+We welcome feedback, suggestions and ideas!
