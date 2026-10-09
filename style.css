@@ -1,42 +1,42 @@
 .home {
-  --accent: #3b5bdb;
-  --accent-dark: rgb(12.6876267748%, 23.9655172414%, 69.0770791075%);
-  --accent-light: rgb(88.1724137931%, 90.1034482759%, 97.8275862069%);
+  --color: #3b5bdb;
+  --dark: #203db0;
+  --light: #e1e6f9;
 }
 
 .clocks {
-  --accent: #0b7285;
-  --accent-dark: rgb(3.2352941176%, 33.5294117647%, 39.1176470588%);
-  --accent-light: rgb(87.0694444444%, 97.0833333333%, 98.9305555556%);
+  --color: #0b7285;
+  --dark: #085564;
+  --light: #def8fc;
 }
 
 .alarm {
-  --accent: #d6336c;
-  --accent-dark: rgb(64.8979591837%, 13.0432172869%, 31.1764705882%);
-  --accent-light: rgb(97.6571428571%, 88.3428571429%, 91.6%);
+  --color: #d6336c;
+  --dark: #a5214f;
+  --light: #f9e1ea;
 }
 
 .stopwatch {
-  --accent: #7048e8;
-  --accent-dark: rgb(27.3443746431%, 9.9828669332%, 79.4288977727%);
-  --accent-light: rgb(90.2815533981%, 87.5631067961%, 98.4368932039%);
+  --color: #7048e8;
+  --dark: #4619cb;
+  --light: #e6dffb;
 }
 
 .countdown {
-  --accent: #c2500a;
-  --accent-dark: rgb(57.0588235294%, 23.5294117647%, 2.9411764706%);
-  --accent-light: rgb(99.3137254902%, 91.4901960784%, 86.6862745098%);
+  --color: #c2500a;
+  --dark: #913c08;
+  --light: #fde9dd;
 }
 
 body {
-  background: var(--accent-light);
+  background: var(--light);
   color: #1f2440;
   font-family: "Outfit", sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
 h1 {
-  color: var(--accent-dark);
+  color: var(--dark);
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -48,14 +48,14 @@ h1 {
   align-items: center;
   gap: 1.5rem;
   min-height: 100vh;
-  min-height: 100dvh;
   max-width: 45rem;
   margin: auto;
   padding: 5rem 1rem 3rem;
   text-align: center;
 }
-.page > * {
-  margin-bottom: 0;
+.page h1,
+.page p {
+  margin: 0;
 }
 
 .back {
@@ -65,68 +65,47 @@ h1 {
 }
 
 .display {
-  padding: 0.1em 0.3em;
-  border-radius: 0.3em;
-  color: var(--accent-dark);
-  font-size: clamp(2.5rem, 13vw, 7rem);
+  padding: 0.5rem 1.5rem;
+  border-radius: 2rem;
+  color: var(--dark);
+  font-size: 13vw;
   font-weight: 600;
   line-height: 1;
 }
+@media (min-width: 900px) {
+  .display {
+    font-size: 7rem;
+  }
+}
 
 .ringing .display {
-  background: var(--accent);
-  color: #fff;
+  background: var(--color);
+  color: white;
 }
 
 .btn {
   padding: 0.7rem 1.4rem;
-  border: 0;
+  border: none;
   border-radius: 2rem;
   font-weight: 500;
 }
-.btn:hover {
-  filter: brightness(0.94);
-}
 
 .btn-primary {
-  --bs-btn-bg: var(--accent);
-  --bs-btn-color: #fff;
-  --bs-btn-hover-bg: var(--accent);
-  --bs-btn-hover-color: #fff;
-  --bs-btn-disabled-bg: var(--accent);
-  --bs-btn-disabled-color: #fff;
-  --bs-btn-active-bg: var(--accent-dark);
-  --bs-btn-active-color: #fff;
-}
-
-.btn-light {
-  --bs-btn-bg: #fff;
-  --bs-btn-color: var(--accent-dark);
-  --bs-btn-hover-bg: #fff;
-  --bs-btn-hover-color: var(--accent-dark);
-  --bs-btn-disabled-bg: #fff;
-  --bs-btn-disabled-color: var(--accent-dark);
-  --bs-btn-active-bg: var(--accent-dark);
-  --bs-btn-active-color: #fff;
+  --bs-btn-bg: var(--color);
+  --bs-btn-hover-bg: var(--dark);
+  --bs-btn-active-bg: var(--dark);
 }
 
 .form-control {
-  border: 2px solid var(--accent);
+  border: 2px solid var(--color);
   border-radius: 1rem;
-}
-
-.list-group {
-  --bs-list-group-color: #1f2440;
-  --bs-list-group-border-color: var(--accent-light);
-  --bs-list-group-border-radius: 1rem;
 }
 
 a:focus-visible,
 .btn:focus-visible,
-.btn-check:focus-visible + .btn,
 .form-control:focus {
-  border-color: var(--accent);
-  outline: 3px solid var(--accent-dark);
+  border-color: var(--color);
+  outline: 3px solid var(--dark);
   outline-offset: 2px;
   box-shadow: none;
 }
@@ -135,8 +114,8 @@ a:focus-visible,
   display: block;
   padding: 1.5rem 0.5rem;
   border-radius: 1.5rem;
-  background: var(--accent);
-  color: #fff;
+  background: var(--color);
+  color: white;
   font-weight: 500;
   text-decoration: none;
 }
@@ -145,18 +124,19 @@ a:focus-visible,
   font-size: 2rem;
 }
 .tile:hover {
-  background: var(--accent-dark);
+  background: var(--dark);
 }
 
 .clock {
-  width: min(70vw, 16rem);
+  width: 16rem;
+  max-width: 70vw;
   fill: #1f2440;
   stroke: #1f2440;
   stroke-width: 5;
   stroke-linecap: round;
 }
 .clock circle {
-  fill: #fff;
+  fill: white;
   stroke: none;
 }
 .clock text {
@@ -169,21 +149,10 @@ a:focus-visible,
 .clock .tick {
   stroke-width: 2;
 }
+.clock .hand {
+  transform-origin: 100px 100px;
+}
 .clock #second-hand {
-  stroke: var(--accent);
+  stroke: var(--color);
   stroke-width: 2;
-}
-
-@keyframes ring {
-  50% {
-    opacity: 0.3;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition {
-    navigation: auto;
-  }
-  .ringing .display {
-    animation: ring 1s infinite;
-  }
 }

@@ -1,265 +1,210 @@
-function get(id) {
-  return document.getElementById(id);
+let timer;
+let zone;
+let running = false;
+let startTime = 0;
+let savedTime = 0;
+let endTime = 0;
+let secondsLeft = 0;
+let laps = 0;
+
+function showText(id, text) {
+  document.getElementById(id).innerHTML = text;
 }
 
-function pad(number) {
-  return String(number).padStart(2, "0");
+function addZero(number) {
+  if (number < 10) {
+    return "0" + number;
+  }
+  return number;
 }
 
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds % 60)}`;
+function timeText(time) {
+  let hours = Math.floor(time / 3600);
+  let minutes = Math.floor(time / 60) % 60;
+  let seconds = time % 60;
+  return addZero(hours) + ":" + addZero(minutes) + ":" + addZero(seconds);
 }
 
-function showClock(zone) {
-  const now = new Date();
-  get("time").textContent = now.toLocaleTimeString("en-GB", { timeZone: zone });
-  get("date").textContent = now.toLocaleDateString("en-GB", {
-    timeZone: zone,
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-function setStatus(text) {
-  get("status").textContent = text;
-}
-
-function setButton(button, icon, text) {
-  button.innerHTML = `<i class="bi bi-${icon}" aria-hidden="true"></i> ${text}`;
-}
-
-function ring(message) {
+function playSound() {
   document.body.classList.add("ringing");
-  get("sound").play().catch(() => {});
-  setStatus(message);
+  document.getElementById("sound").play();
 }
 
-function stopRinging() {
+function stopSound() {
   document.body.classList.remove("ringing");
-  get("sound").pause();
-  get("sound").currentTime = 0;
+  document.getElementById("sound").pause();
+  document.getElementById("sound").currentTime = 0;
 }
 
-function homePage() {
-  function turn(id, degrees) {
-    get(id).setAttribute("transform", `rotate(${degrees} 100 100)`);
-  }
-
-  function update() {
-    const now = new Date();
-    showClock();
-    turn("hour-hand", now.getHours() * 30 + now.getMinutes() / 2);
-    turn("minute-hand", now.getMinutes() * 6);
-    turn("second-hand", now.getSeconds() * 6);
-  }
-
-  get("toggle").addEventListener("click", () => {
-    get("time").classList.toggle("visually-hidden");
-    get("analog").classList.toggle("d-none");
+function showClock() {
+  let now = new Date();
+  let time = now.toLocaleTimeString("en-GB", { timeZone: zone });
+  let date = now.toLocaleDateString("en-GB", {
+    timeZone: zone,
+    dateStyle: "full",
   });
-
-  update();
-  setInterval(update, 250);
+  showText("time", time);
+  showText("date", date);
 }
 
-function clocksPage() {
-  function update() {
-    showClock(document.querySelector("input:checked").value);
-  }
-
-  get("cities").addEventListener("change", update);
-  update();
-  setInterval(update, 250);
+function startClock() {
+  clearInterval(timer);
+  showClock();
+  timer = setInterval(showClock, 1000);
 }
 
-function alarmPage() {
-  const input = get("alarm-time");
-  const button = get("start");
-  const now = new Date();
-  let alarmAt = 0;
-  let timer = null;
-  let isOn = false;
+function showCity(city, cityZone) {
+  zone = cityZone;
+  showText("city", city);
+  startClock();
+}
 
-  function tick() {
-    const left = Math.max(0, Math.ceil((alarmAt - Date.now()) / 1000));
-    get("time").textContent = formatTime(left);
-    if (left === 0) {
-      clearInterval(timer);
-      setButton(button, "bell-slash", "Stop alarm");
-      ring("The alarm is ringing!");
-    }
+function turnHand(id, degrees) {
+  let hand = document.getElementById(id);
+  hand.style.transform = "rotate(" + degrees + "deg)";
+}
+
+function moveHands() {
+  let now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  let seconds = now.getSeconds();
+  turnHand("hour-hand", hours * 30 + minutes / 2);
+  turnHand("minute-hand", minutes * 6);
+  turnHand("second-hand", seconds * 6);
+}
+
+function startHome() {
+  startClock();
+  moveHands();
+  setInterval(moveHands, 1000);
+}
+
+function switchStyle() {
+  document.getElementById("time").classList.toggle("visually-hidden");
+  document.getElementById("analog").classList.toggle("d-none");
+}
+
+function showStopwatch() {
+  let time = savedTime;
+  if (running == true) {
+    time = savedTime + Date.now() - startTime;
   }
+  let seconds = Math.floor(time / 1000);
+  let hundredths = Math.floor(time / 10) % 100;
+  showText("time", timeText(seconds) + "." + addZero(hundredths));
+}
 
-  function setAlarm() {
-    if (!input.value) {
-      setStatus("Pick a date and time first.");
-      return;
-    }
-    alarmAt = new Date(input.value).getTime();
-    if (alarmAt <= Date.now()) {
-      setStatus("Pick a time in the future.");
-      return;
-    }
-    const when = new Date(alarmAt).toLocaleString("en-GB", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-    isOn = true;
-    input.disabled = true;
-    button.focus();
-    setButton(button, "x-lg", "Cancel alarm");
-    setStatus(`Alarm set for ${when}.`);
-    timer = setInterval(tick, 250);
-    tick();
+function startStopwatch() {
+  if (running == true) {
+    return;
   }
+  running = true;
+  startTime = Date.now();
+  timer = setInterval(showStopwatch, 10);
+}
 
-  function stopAlarm() {
+function stopStopwatch() {
+  if (running == true) {
+    savedTime = savedTime + Date.now() - startTime;
+  }
+  running = false;
+  clearInterval(timer);
+  showStopwatch();
+}
+
+function resetStopwatch() {
+  stopStopwatch();
+  savedTime = 0;
+  laps = 0;
+  showText("laps", "");
+  showStopwatch();
+}
+
+function addLap() {
+  if (running == false) {
+    return;
+  }
+  laps = laps + 1;
+  let time = document.getElementById("time").innerHTML;
+  let list = document.getElementById("laps").innerHTML;
+  let lap = '<li class="list-group-item">Lap ' + laps + ": " + time + "</li>";
+  showText("laps", lap + list);
+}
+
+function countDown() {
+  secondsLeft = Math.ceil((endTime - Date.now()) / 1000);
+  if (secondsLeft <= 0) {
+    secondsLeft = 0;
+    running = false;
     clearInterval(timer);
-    stopRinging();
-    isOn = false;
-    input.disabled = false;
-    get("time").textContent = formatTime(0);
-    setButton(button, "bell", "Set alarm");
-    setStatus("Alarm is off.");
+    playSound();
+    showText("status", "Time is up!");
   }
-
-  get("form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (isOn) {
-      stopAlarm();
-    } else {
-      setAlarm();
-    }
-  });
-
-  input.min = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
-  input.value = input.min;
+  showText("time", timeText(secondsLeft));
 }
 
-function stopwatchPage() {
-  const start = get("start");
-  const lap = get("lap");
-  const laps = get("laps");
-  let startedAt = 0;
-  let saved = 0;
-  let timer = null;
-
-  function update() {
-    let elapsed = saved;
-    if (timer) elapsed += Date.now() - startedAt;
-  
-    const seconds = Math.floor(elapsed / 1000);
-    const centiseconds = Math.floor(elapsed / 10) % 100;
-    get("time").textContent = `${formatTime(seconds)}.${pad(centiseconds)}`;
+function readCountdown() {
+  let minutes = Number(document.getElementById("minutes").value);
+  let seconds = Number(document.getElementById("seconds").value);
+  secondsLeft = Math.floor(minutes * 60 + seconds);
+  if (secondsLeft < 0) {
+    secondsLeft = 0;
   }
-
-  function pause() {
-    clearInterval(timer);
-    timer = null;
-    lap.disabled = true;
-    setButton(start, "play-fill", "Start");
-  }
-
-  start.addEventListener("click", () => {
-    if (timer) {
-      saved += Date.now() - startedAt;
-      pause();
-    } else {
-      startedAt = Date.now();
-      timer = setInterval(update, 10);
-      lap.disabled = false;
-      setButton(start, "pause-fill", "Pause");
-    }
-    update();
-  });
-
-  lap.addEventListener("click", () => {
-    const item = document.createElement("li");
-    item.className = "list-group-item d-flex justify-content-between";
-    item.innerHTML = `<span>Lap ${laps.children.length + 1}</span><span>${get("time").textContent}</span>`;
-    laps.prepend(item);
-  });
-
-  get("reset").addEventListener("click", () => {
-    pause();
-    saved = 0;
-    laps.innerHTML = "";
-    update();
-  });
+  showText("time", timeText(secondsLeft));
 }
 
-function countdownPage() {
-  const start = get("start");
-  const fields = get("fields");
-  let left = 0;
-  let endAt = 0;
-  let timer = null;
-
-  function readFields() {
-    const seconds =
-      Number(get("minutes").value) * 60 + Number(get("seconds").value);
-    left = Math.max(0, Math.floor(seconds));
-    get("time").textContent = formatTime(left);
+function startCountdown() {
+  if (running == true) {
+    return;
   }
-
-  function pause() {
-    clearInterval(timer);
-    timer = null;
-    fields.disabled = false;
-    setButton(start, "play-fill", "Start");
+  stopSound();
+  if (secondsLeft == 0) {
+    readCountdown();
   }
-
-  function tick() {
-    left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
-    get("time").textContent = formatTime(left);
-    if (left === 0) {
-      pause();
-      ring("Time is up!");
-    }
+  if (secondsLeft == 0) {
+    showText("status", "Write the minutes or the seconds first.");
+    return;
   }
-
-  get("form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    stopRinging();
-    if (timer) {
-      pause();
-      setStatus("Paused.");
-      return;
-    }
-    if (left === 0) {
-      readFields();
-    }
-    if (left === 0) {
-      setStatus("Enter a time longer than zero.");
-      return;
-    }
-    endAt = Date.now() + left * 1000;
-    timer = setInterval(tick, 250);
-    fields.disabled = true;
-    start.focus();
-    setButton(start, "pause-fill", "Pause");
-    setStatus("");
-  });
-
-  get("reset").addEventListener("click", () => {
-    pause();
-    stopRinging();
-    readFields();
-    setStatus("");
-  });
-
-  fields.addEventListener("input", readFields);
-  readFields();
+  running = true;
+  endTime = Date.now() + secondsLeft * 1000;
+  timer = setInterval(countDown, 200);
+  showText("status", "");
 }
 
-const page = document.body.classList;
+function stopCountdown() {
+  running = false;
+  clearInterval(timer);
+  stopSound();
+}
 
-if (page.contains("home")) homePage();
-if (page.contains("clocks")) clocksPage();
-if (page.contains("alarm")) alarmPage();
-if (page.contains("stopwatch")) stopwatchPage();
-if (page.contains("countdown")) countdownPage();
+function resetCountdown() {
+  stopCountdown();
+  readCountdown();
+  showText("status", "");
+}
+
+function setAlarm() {
+  let value = document.getElementById("alarm-time").value;
+  if (value == "") {
+    showText("status", "Pick a date and time first.");
+    return;
+  }
+  let alarmTime = new Date(value).getTime();
+  if (alarmTime <= Date.now()) {
+    showText("status", "Pick a time in the future.");
+    return;
+  }
+  stopCountdown();
+  running = true;
+  endTime = alarmTime;
+  timer = setInterval(countDown, 200);
+  showText("status", "The alarm is on.");
+  countDown();
+}
+
+function stopAlarm() {
+  stopCountdown();
+  showText("time", timeText(0));
+  showText("status", "The alarm is off.");
+}

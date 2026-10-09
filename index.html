@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="user-select-none home" oncontextmenu="return false">
+<body class="user-select-none home" oncontextmenu="return false" onload="startHome()">
     <main class="page">
         <h1><img src="icon.svg" alt="" width="40" height="40"> Clockify</h1>
 
@@ -33,17 +33,17 @@
             <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(240 100 100)" />
             <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(300 100 100)" />
             <line class="tick" x1="100" y1="16" x2="100" y2="24" transform="rotate(330 100 100)" />
-            <line id="hour-hand" x1="100" y1="100" x2="100" y2="60" />
-            <line id="minute-hand" x1="100" y1="100" x2="100" y2="42" />
-            <line id="second-hand" x1="100" y1="116" x2="100" y2="38" />
+            <line class="hand" id="hour-hand" x1="100" y1="100" x2="100" y2="60" />
+            <line class="hand" id="minute-hand" x1="100" y1="100" x2="100" y2="42" />
+            <line class="hand" id="second-hand" x1="100" y1="116" x2="100" y2="38" />
         </svg>
         <p class="fs-5" id="date"></p>
 
-        <button class="btn btn-light" id="toggle" type="button">
+        <button class="btn btn-light" type="button" onclick="switchStyle()">
             <i class="bi bi-arrow-repeat" aria-hidden="true"></i> Switch style
         </button>
 
-        <ul class="row row-cols-2 row-cols-md-4 g-3 w-100 list-unstyled">
+        <ul class="row row-cols-2 row-cols-md-4 g-3 w-100 mb-0 list-unstyled">
             <li class="col">
                 <a class="tile clocks" href="clocks.html"><i class="bi bi-globe-americas" aria-hidden="true"></i> World clocks</a>
             </li>
