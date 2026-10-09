@@ -40,7 +40,7 @@ Pick a city to see its time and date: New York, London, Dubai, Mumbai, Tokyo or 
 
 - Set a future date and time.
 - See how much time is left in **hours, minutes and seconds**.
-- Cancel the alarm if you change your mind.
+- Stop the alarm if you change your mind.
 
 When the time comes the alarm plays a sound and the clock is highlighted until you stop it. Keep the page open, the alarm only works while the page is open.
 
@@ -48,13 +48,13 @@ When the time comes the alarm plays a sound and the clock is highlighted until y
 
 ### 4. Stopwatch (`stopwatch.html`)
 
-Start, pause and reset the timer. It shows **hours, minutes, seconds and hundredths**. The **Lap** button saves the current time in a list.
+Start, stop and reset the timer. It shows **hours, minutes, seconds and hundredths**. The **Lap** button saves the current time in a list.
 
 ![Stopwatch](screenshots/stopwatch.png)
 
 ### 5. Countdown (`countdown.html`)
 
-Write the minutes and seconds or use the default **2 minutes**. You can start, pause and reset. A sound plays when the time is up.
+Write the minutes and seconds or use the default **2 minutes**. You can start, stop and reset. A sound plays when the time is up.
 
 ![Countdown](screenshots/countdown.png)
 
@@ -95,7 +95,7 @@ npx sass --no-source-map style.scss style.css
 - Every page works with the keyboard and the focus is always visible.
 - The colors have enough contrast for the text.
 - Screen readers get the messages of the alarm and the countdown.
-- The animations are turned off if the system asks for less motion.
+- There are no flashing animations.
 
 ---
 

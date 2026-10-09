@@ -14,30 +14,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="clocks user-select-none" oncontextmenu="return false">
+<body class="clocks user-select-none" oncontextmenu="return false" onload="showCity('New York', 'America/New_York')">
     <main class="page">
         <a class="btn btn-light back" href="index.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> Home</a>
 
         <h1><i class="bi bi-globe-americas" aria-hidden="true"></i> World clocks</h1>
 
+        <p class="fs-4" id="city" role="status"></p>
         <p class="display" id="time">00:00:00</p>
         <p class="fs-5" id="date"></p>
 
-        <fieldset class="d-flex flex-wrap justify-content-center gap-2" id="cities">
-            <legend class="visually-hidden">City</legend>
-            <input class="btn-check" type="radio" name="city" id="new-york" value="America/New_York" checked>
-            <label class="btn btn-light" for="new-york">New York</label>
-            <input class="btn-check" type="radio" name="city" id="london" value="Europe/London">
-            <label class="btn btn-light" for="london">London</label>
-            <input class="btn-check" type="radio" name="city" id="dubai" value="Asia/Dubai">
-            <label class="btn btn-light" for="dubai">Dubai</label>
-            <input class="btn-check" type="radio" name="city" id="mumbai" value="Asia/Kolkata">
-            <label class="btn btn-light" for="mumbai">Mumbai</label>
-            <input class="btn-check" type="radio" name="city" id="tokyo" value="Asia/Tokyo">
-            <label class="btn btn-light" for="tokyo">Tokyo</label>
-            <input class="btn-check" type="radio" name="city" id="sydney" value="Australia/Sydney">
-            <label class="btn btn-light" for="sydney">Sydney</label>
-        </fieldset>
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button class="btn btn-light" type="button" onclick="showCity('New York', 'America/New_York')">New York</button>
+            <button class="btn btn-light" type="button" onclick="showCity('London', 'Europe/London')">London</button>
+            <button class="btn btn-light" type="button" onclick="showCity('Dubai', 'Asia/Dubai')">Dubai</button>
+            <button class="btn btn-light" type="button" onclick="showCity('Mumbai', 'Asia/Kolkata')">Mumbai</button>
+            <button class="btn btn-light" type="button" onclick="showCity('Tokyo', 'Asia/Tokyo')">Tokyo</button>
+            <button class="btn btn-light" type="button" onclick="showCity('Sydney', 'Australia/Sydney')">Sydney</button>
+        </div>
     </main>
 
     <script src="script.js"></script>

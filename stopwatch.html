@@ -9,7 +9,7 @@
     <title>Stopwatch - Clockify</title>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -23,18 +23,21 @@
         <p class="display" id="time" role="timer">00:00:00.00</p>
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
-            <button class="btn btn-primary" id="start" type="button">
+            <button class="btn btn-primary" type="button" onclick="startStopwatch()">
                 <i class="bi bi-play-fill" aria-hidden="true"></i> Start
             </button>
-            <button class="btn btn-light" id="lap" type="button" disabled>
+            <button class="btn btn-light" type="button" onclick="stopStopwatch()">
+                <i class="bi bi-pause-fill" aria-hidden="true"></i> Stop
+            </button>
+            <button class="btn btn-light" type="button" onclick="addLap()">
                 <i class="bi bi-flag" aria-hidden="true"></i> Lap
             </button>
-            <button class="btn btn-light" id="reset" type="button">
+            <button class="btn btn-light" type="button" onclick="resetStopwatch()">
                 <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset
             </button>
         </div>
 
-        <ol class="list-group col-10 col-sm-6" id="laps" aria-label="Laps" aria-live="polite"></ol>
+        <ul class="list-group col-10 col-sm-6" id="laps" aria-label="Laps" aria-live="polite"></ul>
     </main>
 
     <script src="script.js"></script>

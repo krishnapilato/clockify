@@ -22,31 +22,32 @@
 
         <p class="display" id="time" role="timer">00:02:00</p>
 
-        <form class="d-flex flex-column align-items-center gap-4" id="form" novalidate>
-            <fieldset class="d-flex gap-3" id="fields">
-                <legend class="visually-hidden">Time to count down</legend>
-                <div>
-                    <label class="form-label" for="minutes">Minutes</label>
-                    <input class="form-control form-control-lg text-center" id="minutes" type="number" min="0" max="999" value="2">
-                </div>
-                <div>
-                    <label class="form-label" for="seconds">Seconds</label>
-                    <input class="form-control form-control-lg text-center" id="seconds" type="number" min="0" max="59" value="0">
-                </div>
-            </fieldset>
-            <div class="d-flex gap-2">
-                <button class="btn btn-primary" id="start" type="submit">
-                    <i class="bi bi-play-fill" aria-hidden="true"></i> Start
-                </button>
-                <button class="btn btn-light" id="reset" type="button">
-                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset
-                </button>
+        <div class="d-flex justify-content-center gap-3">
+            <div>
+                <label class="form-label" for="minutes">Minutes</label>
+                <input class="form-control form-control-lg text-center" id="minutes" type="number" min="0" max="999" value="2" oninput="resetCountdown()">
             </div>
-        </form>
+            <div>
+                <label class="form-label" for="seconds">Seconds</label>
+                <input class="form-control form-control-lg text-center" id="seconds" type="number" min="0" max="59" value="0" oninput="resetCountdown()">
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button class="btn btn-primary" type="button" onclick="startCountdown()">
+                <i class="bi bi-play-fill" aria-hidden="true"></i> Start
+            </button>
+            <button class="btn btn-light" type="button" onclick="stopCountdown()">
+                <i class="bi bi-pause-fill" aria-hidden="true"></i> Stop
+            </button>
+            <button class="btn btn-light" type="button" onclick="resetCountdown()">
+                <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset
+            </button>
+        </div>
 
         <p class="fs-5" id="status" role="status"></p>
 
-        <audio id="sound" src="alarm.mp3" preload="auto"></audio>
+        <audio id="sound" src="alarm.mp3"></audio>
     </main>
 
     <script src="script.js"></script>
