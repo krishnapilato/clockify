@@ -12,9 +12,7 @@ function showText(id, text) {
 }
 
 function addZero(number) {
-  if (number < 10) {
-    return "0" + number;
-  }
+  if (number < 10) return "0" + number;
   return number;
 }
 
@@ -39,10 +37,7 @@ function stopSound() {
 function showClock() {
   let now = new Date();
   let time = now.toLocaleTimeString("en-GB", { timeZone: zone });
-  let date = now.toLocaleDateString("en-GB", {
-    timeZone: zone,
-    dateStyle: "full",
-  });
+  let date = now.toLocaleDateString("en-GB", { timeZone: zone, dateStyle: "full" });
   showText("time", time);
   showText("date", date);
 }
@@ -87,16 +82,14 @@ function switchStyle() {
 
 function showStopwatch() {
   let time = savedTime;
-  if (running == true) {
-    time = savedTime + Date.now() - startTime;
-  }
+  if (running === true) time = savedTime + Date.now() - startTime;
   let seconds = Math.floor(time / 1000);
   let hundredths = Math.floor(time / 10) % 100;
   showText("time", timeText(seconds) + "." + addZero(hundredths));
 }
 
 function startStopwatch() {
-  if (running == true) {
+  if (running === true) {
     return;
   }
   running = true;
@@ -105,9 +98,7 @@ function startStopwatch() {
 }
 
 function stopStopwatch() {
-  if (running == true) {
-    savedTime = savedTime + Date.now() - startTime;
-  }
+  if (running === true) savedTime = savedTime + Date.now() - startTime;
   running = false;
   clearInterval(timer);
   showStopwatch();
@@ -122,9 +113,7 @@ function resetStopwatch() {
 }
 
 function addLap() {
-  if (running == false) {
-    return;
-  }
+  if (running === false) return;
   laps = laps + 1;
   let time = document.getElementById("time").innerHTML;
   let list = document.getElementById("laps").innerHTML;
@@ -155,14 +144,11 @@ function readCountdown() {
 }
 
 function startCountdown() {
-  if (running == true) {
-    return;
-  }
+  if (running === true) return;
   stopSound();
-  if (secondsLeft == 0) {
-    readCountdown();
-  }
-  if (secondsLeft == 0) {
+  
+  if (secondsLeft === 0) readCountdown();
+  if (secondsLeft === 0) {
     showText("status", "Write the minutes or the seconds first.");
     return;
   }
@@ -186,7 +172,7 @@ function resetCountdown() {
 
 function setAlarm() {
   let value = document.getElementById("alarm-time").value;
-  if (value == "") {
+  if (value === "") {
     showText("status", "Pick a date and time first.");
     return;
   }
