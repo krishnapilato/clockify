@@ -1,0 +1,33 @@
+$icons: (
+  "123",
+  "alarm",
+  "arrow-counterclockwise",
+  "bell",
+  "bell-slash",
+  "chevron-down",
+  "clock",
+  "flag",
+  "globe-americas",
+  "hourglass-split",
+  "list",
+  "pause-fill",
+  "play-fill",
+  "plus-lg",
+  "stopwatch",
+  "volume-up",
+  "x-lg"
+);
+
+.bi {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background: currentcolor;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+@each $icon in $icons {
+  .bi-#{$icon} {
+    --icon: url("bootstrap-icons/icons/#{$icon}.svg");
+  }
+}

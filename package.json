@@ -1,0 +1,52 @@
+{
+  "name": "clockify",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown.",
+  "engines": {
+    "node": ">=26.13"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*.ts"
+  },
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite preview --open",
+    "typecheck": "node node_modules/typescript7/bin/tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "lint:styles": "stylelint \"src/**/*.scss\" --max-warnings 0",
+    "lint:html": "html-validate \"*.html\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "unused": "knip --treat-config-hints-as-errors",
+    "test": "vitest run --coverage",
+    "check": "npm run format:check && npm run typecheck && npm run lint && npm run lint:styles && npm run lint:html && npm run unused && npm run test"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "5.3.0",
+    "bootstrap": "6.0.0-alpha.1",
+    "bootstrap-icons": "1.13.2",
+    "gsap": "3.15.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.6.6",
+    "@vitest/coverage-v8": "5.0.5",
+    "eslint": "10.13.0",
+    "eslint-plugin-sonarjs": "4.2.2",
+    "globals": "17.13.0",
+    "html-validate": "11.17.0",
+    "knip": "6.43.0",
+    "prettier": "3.9.10",
+    "sass": "1.107.0",
+    "stylelint": "17.16.0",
+    "stylelint-config-standard-scss": "17.0.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "typescript7": "npm:typescript@7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  }
+}

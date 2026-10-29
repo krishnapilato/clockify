@@ -1,68 +1,114 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Count down from any number of minutes and seconds." />
+    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0e0e11" />
+    <title>Countdown · Clockify</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/pages/countdown.ts"></script>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Count down from any number of minutes and seconds.">
-    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano">
-    <meta name="theme-color" content="#141311">
-    <title>Countdown - Clockify</title>
-    <link rel="icon" href="icon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Outfit:wght@300;400;500&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-    <script src="script.js" defer></script>
-</head>
+  <body>
+    <img
+      class="photo"
+      id="photo"
+      src="data:,"
+      alt=""
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-<body class="user-select-none" data-page="countdown" data-photo="clock" oncontextmenu="return false">
-    <img class="photo" id="photo" alt="">
+    <header class="topbar">
+      <a class="brand" href="index.html">Clockify</a>
+      <p class="credit" id="credit"></p>
+    </header>
 
     <main class="page">
-        <h1 class="visually-hidden">Countdown</h1>
+      <h1 class="visually-hidden">Countdown</h1>
 
-        <div class="dial">
-            <svg viewBox="0 0 200 200" aria-hidden="true">
-                <circle class="face" cx="100" cy="100" r="100" />
-                <circle class="ticks" cx="100" cy="100" r="88" pathLength="60" />
-                <circle class="ticks hours" cx="100" cy="100" r="88" pathLength="12" />
-                <circle class="ring" id="ring" cx="100" cy="100" r="95" pathLength="100" transform="rotate(-90 100 100)" />
-            </svg>
-            <div class="dial-text">
-                <p class="display" role="timer">
-                    <input class="time-input" id="minutes" type="text" inputmode="numeric" maxlength="2" autocomplete="off" value="02" aria-label="Minutes">:<input class="time-input" id="seconds" type="text" inputmode="numeric" maxlength="2" autocomplete="off" value="00" aria-label="Seconds">
-                </p>
-            </div>
-            <button class="round-button dial-left" type="button" data-action="resetCountdown" aria-label="Reset" title="Reset">
-                <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-            </button>
-            <button class="round-button main dial-middle" id="play-button" type="button" data-action="toggleCountdown" aria-label="Start" title="Start">
-                <i class="bi bi-play-fill" aria-hidden="true"></i>
-            </button>
-            <button class="round-button dial-right" type="button" data-action="addMinute" aria-label="Add one minute" title="Add one minute">
-                <i class="bi bi-plus-lg" aria-hidden="true"></i>
-            </button>
-        </div>
-
-        <audio id="sound" src="sounds/classic.mp3"></audio>
+      <div class="meta"><span class="label">Tap the numbers to change them</span></div>
+      <div class="face">
+        <p class="display" role="timer">
+          <input
+            class="digits time-input"
+            id="minutes"
+            type="text"
+            inputmode="numeric"
+            maxlength="2"
+            autocomplete="off"
+            value="02"
+            aria-label="Minutes"
+          />
+          <input
+            class="digits time-input"
+            id="seconds"
+            type="text"
+            inputmode="numeric"
+            maxlength="2"
+            autocomplete="off"
+            value="00"
+            aria-label="Seconds"
+          />
+        </p>
+      </div>
+      <div class="progress" aria-hidden="true">
+        <span class="progress-bar" id="progress"></span>
+      </div>
+      <div class="controls">
+        <button class="pill" id="reset-button" type="button">
+          <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+          <span class="pill-text">Reset</span>
+        </button>
+        <button class="pill main" id="play-button" type="button">
+          <i class="bi bi-play-fill" aria-hidden="true"></i>
+          <span class="pill-text">Start</span>
+        </button>
+        <button class="pill" id="minute-button" type="button">
+          <i class="bi bi-plus-lg" aria-hidden="true"></i>
+          <span class="pill-text">1 min</span>
+        </button>
+      </div>
+      <audio id="sound"></audio>
     </main>
 
-    <p class="credit" id="credit"></p>
-
-    <nav class="corner-menu" id="corner-menu" aria-label="Pages">
-        <button class="round-button corner-menu-button" id="corner-menu-button" type="button" aria-label="Open the menu" title="Menu" aria-expanded="false" aria-controls="corner-menu-links">
-            <i class="bi bi-list" aria-hidden="true"></i>
-        </button>
-        <ul class="corner-menu-links" id="corner-menu-links">
-            <li><a class="round-button corner-menu-link" href="index.html" aria-label="Clock" title="Clock"><i class="bi bi-clock" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="clocks.html" aria-label="World clocks" title="World clocks"><i class="bi bi-globe-americas" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="alarm.html" aria-label="Alarm" title="Alarm"><i class="bi bi-alarm" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="stopwatch.html" aria-label="Stopwatch" title="Stopwatch"><i class="bi bi-stopwatch" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="countdown.html" aria-label="Countdown" title="Countdown" aria-current="page"><i class="bi bi-hourglass-split" aria-hidden="true"></i></a></li>
-        </ul>
+    <nav class="dock" aria-label="Pages">
+      <ul class="dock-links">
+        <li>
+          <a class="dock-link" href="index.html">
+            <i class="bi bi-clock" aria-hidden="true"></i>
+            <span>Clock</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="clocks.html">
+            <i class="bi bi-globe-americas" aria-hidden="true"></i>
+            <span>World</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="alarm.html">
+            <i class="bi bi-alarm" aria-hidden="true"></i>
+            <span>Alarm</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="stopwatch.html">
+            <i class="bi bi-stopwatch" aria-hidden="true"></i>
+            <span>Stopwatch</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="countdown.html" aria-current="page">
+            <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+            <span>Timer</span>
+          </a>
+        </li>
+      </ul>
     </nav>
-</body>
-
+  </body>
 </html>

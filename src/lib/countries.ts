@@ -1,0 +1,65 @@
+export interface Country {
+  name: string;
+  zone: string;
+}
+
+const DEFAULT_COUNTRY: Country = { name: "Italy", zone: "Europe/Rome" };
+
+export const COUNTRIES: readonly Country[] = [
+  { name: "Argentina", zone: "America/Argentina/Buenos_Aires" },
+  { name: "Australia", zone: "Australia/Sydney" },
+  { name: "Austria", zone: "Europe/Vienna" },
+  { name: "Bangladesh", zone: "Asia/Dhaka" },
+  { name: "Belgium", zone: "Europe/Brussels" },
+  { name: "Brazil", zone: "America/Sao_Paulo" },
+  { name: "Canada", zone: "America/Toronto" },
+  { name: "Chile", zone: "America/Santiago" },
+  { name: "China", zone: "Asia/Shanghai" },
+  { name: "Colombia", zone: "America/Bogota" },
+  { name: "Czechia", zone: "Europe/Prague" },
+  { name: "Denmark", zone: "Europe/Copenhagen" },
+  { name: "Egypt", zone: "Africa/Cairo" },
+  { name: "Finland", zone: "Europe/Helsinki" },
+  { name: "France", zone: "Europe/Paris" },
+  { name: "Germany", zone: "Europe/Berlin" },
+  { name: "Greece", zone: "Europe/Athens" },
+  { name: "Iceland", zone: "Atlantic/Reykjavik" },
+  { name: "India", zone: "Asia/Kolkata" },
+  { name: "Indonesia", zone: "Asia/Jakarta" },
+  { name: "Iran", zone: "Asia/Tehran" },
+  { name: "Ireland", zone: "Europe/Dublin" },
+  { name: "Israel", zone: "Asia/Jerusalem" },
+  { name: "Italy", zone: "Europe/Rome" },
+  { name: "Japan", zone: "Asia/Tokyo" },
+  { name: "Kenya", zone: "Africa/Nairobi" },
+  { name: "Malaysia", zone: "Asia/Kuala_Lumpur" },
+  { name: "Mexico", zone: "America/Mexico_City" },
+  { name: "Morocco", zone: "Africa/Casablanca" },
+  { name: "Netherlands", zone: "Europe/Amsterdam" },
+  { name: "New Zealand", zone: "Pacific/Auckland" },
+  { name: "Nigeria", zone: "Africa/Lagos" },
+  { name: "Norway", zone: "Europe/Oslo" },
+  { name: "Pakistan", zone: "Asia/Karachi" },
+  { name: "Peru", zone: "America/Lima" },
+  { name: "Philippines", zone: "Asia/Manila" },
+  { name: "Poland", zone: "Europe/Warsaw" },
+  { name: "Portugal", zone: "Europe/Lisbon" },
+  { name: "Russia", zone: "Europe/Moscow" },
+  { name: "Saudi Arabia", zone: "Asia/Riyadh" },
+  { name: "Singapore", zone: "Asia/Singapore" },
+  { name: "South Africa", zone: "Africa/Johannesburg" },
+  { name: "South Korea", zone: "Asia/Seoul" },
+  { name: "Spain", zone: "Europe/Madrid" },
+  { name: "Sweden", zone: "Europe/Stockholm" },
+  { name: "Switzerland", zone: "Europe/Zurich" },
+  { name: "Thailand", zone: "Asia/Bangkok" },
+  { name: "Türkiye", zone: "Europe/Istanbul" },
+  { name: "Ukraine", zone: "Europe/Kyiv" },
+  { name: "United Arab Emirates", zone: "Asia/Dubai" },
+  { name: "United Kingdom", zone: "Europe/London" },
+  { name: "United States", zone: "America/New_York" },
+  { name: "Vietnam", zone: "Asia/Ho_Chi_Minh" },
+];
+
+export const findCountry = (name?: string): Country =>
+  COUNTRIES.find((country) => country.name === name) ?? DEFAULT_COUNTRY;

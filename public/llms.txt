@@ -1,0 +1,9 @@
+# Clockify
+
+> A simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown. Everything runs in the browser; settings are encrypted on the device.
+
+- [Clock](index.html): current time, digital or analog
+- [World clocks](clocks.html): time in 53 countries
+- [Alarm](alarm.html): alarm with six ringtones
+- [Stopwatch](stopwatch.html): laps to the thousandth of a second
+- [Countdown](countdown.html): up to 99 minutes

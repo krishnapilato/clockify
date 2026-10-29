@@ -1,0 +1,14 @@
+@mixin glass($tint: var(--glass)) {
+  border: 1px solid var(--edge);
+  background: $tint;
+  box-shadow: var(--shadow), var(--sheen);
+  backdrop-filter: var(--blur);
+}
+
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
