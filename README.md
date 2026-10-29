@@ -1,130 +1,139 @@
 # Clockify
 
-Clockify is a simple and elegant clock app with world clocks, an alarm, a stopwatch and a countdown.
+Clockify is a simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown.
 
-**Live preview: [krishnapilato.github.io/clockify](https://krishnapilato.github.io/clockify/)**
+**Live: [krishnapilato.github.io/clockify](https://krishnapilato.github.io/clockify/)**
 
 ![Clockify home page](screenshots/home.jpg)
 
-This project is part of our internship experience. We were a team of two and we made the first version in two days. We keep improving it step by step.
+This project started during our internship: we were a team of two and made the first version in two days, in Sept 2021. We keep improving it step by step.
 
-Made by [Khova Krishna Pilato](https://www.linkedin.com/in/khovakrishnapilato) and [Pasquale Marciano](https://www.linkedin.com/in/pasquale-marciano-443a55205/) in Sept 2021. Keeping project updated.
+Made by [Khova Krishna Pilato](https://www.linkedin.com/in/khovakrishnapilato) and [Pasquale Marciano](https://www.linkedin.com/in/pasquale-marciano-443a55205/).
 
 ---
 
-## Technologies Used
+## Lighthouse
 
-- **HTML5**
-- **CSS**
-- **JavaScript (ESNext)**: modern syntax like `const`, arrow functions, template literals, `?.` and `??`
-- **Bootstrap 6.0.0 alpha 1**
-- **Bootstrap Icons 1.13.2**
+![Lighthouse scores: Performance 98, Accessibility 100, Best Practices 100, SEO 100](screenshots/lighthouse.png)
+
+Measured with Lighthouse 13.6 on the production build (`npm run build && npm run preview`):
+
+| Page      | Performance (mobile / desktop) | Accessibility | Best Practices | SEO |
+| --------- | :----------------------------: | :-----------: | :------------: | :-: |
+| Clock     |            98 / 98             |      100      |      100       | 100 |
+| World     |            100 / 96            |      100      |      100       | 100 |
+| Alarm     |            98 / 96             |      100      |      100       | 100 |
+| Stopwatch |            99 / 97             |      100      |      100       | 100 |
+| Countdown |            99 / 96             |      100      |      100       | 100 |
+
+---
+
+## The Design
+
+The redesign is based on the oversized-numbers clock shots on Dribbble (like the _World Clock App_ concepts), with a warm amber-to-coral accent:
+
+- **Huge condensed numbers** fill the screen: hours above minutes on phones, side by side on wide screens. The seconds sit small next to them.
+- A **thin gradient line** under the numbers shows the progress of the minute, the alarm or the countdown.
+- **Pill buttons with a label** (Reset · Start · Lap), with the main action in the gradient.
+- A **floating glass dock** at the bottom to move between the five pages.
+- A **random free photo** in the background on every visit: landscapes, mountains, sea, aurora, skylines, bridges… darkened so the numbers are always readable. Only the author is shown in the top-right corner, with a link to the photo and its license.
+- **Fully responsive**: phones, tablets, desktops, and phones in landscape.
+
+| Analog                            | World clocks                     |
+| --------------------------------- | -------------------------------- |
+| ![Analog](screenshots/analog.jpg) | ![World](screenshots/clocks.jpg) |
+
+| Alarm                           | Stopwatch with laps                     |
+| ------------------------------- | --------------------------------------- |
+| ![Alarm](screenshots/alarm.jpg) | ![Stopwatch](screenshots/stopwatch.jpg) |
+
+<img src="screenshots/mobile.jpg" alt="Clockify on a phone" width="260"> <img src="screenshots/mobile-alarm.jpg" alt="The alarm on a phone" width="260">
+
+---
+
+## Features
+
+1. **Clock** (`index.html`): the time, the day and the date. One button switches between the digital and the analog clock.
+2. **World clocks** (`clocks.html`): choose one of 53 countries from the pill above the numbers.
+3. **Alarm** (`alarm.html`): pick the date, the time and one of six ringtones. Keep the page open: the alarm rings only while the page is open.
+4. **Stopwatch** (`stopwatch.html`): minutes, seconds and thousandths, with laps.
+5. **Countdown** (`countdown.html`): tap the numbers and type the minutes and seconds, up to 99 minutes. The **1 min** button adds a minute, even while it runs.
+
+---
+
+## Privacy First
+
+- No accounts, no tracking, no analytics, no cookies.
+- Your choices (clock style, country, ringtone) are **encrypted** with AES-GCM 256 before they are saved in `localStorage`. The key is a non-extractable Web Crypto key kept in IndexedDB, so the raw key can never be read or exported.
+- Values read back from storage are checked against a fixed list (ringtones, countries, clock styles) before they are used.
+- The photos and the Wikimedia API are loaded **without cookies and without referrer**.
+- A strict **Content Security Policy** allows only the site itself and Wikimedia.
+
+---
+
+## Stack
+
+- **Vite 8** multi-page build, **TypeScript 7** (ESNext, strictest options), **SCSS** with the Sass module system
 - **GSAP 3** for the animations
-- **Wikimedia Commons API** for the background photos (free, no key needed)
+- **Bootstrap 6.0.0 alpha 1** (Reboot) and **Bootstrap Icons** (only the 17 icons we use, as SVG masks)
+- **Archivo** variable font (width axis for the condensed numbers), self-hosted
+- **Wikimedia Commons API** for the photos (free, no key)
+- **Node.js ≥ 26.13 LTS**
 
 ---
 
-## The Look
+## Quality Gates
 
-- Every page is one centered **dial**, and everything you need is inside it or on its edge. Small round buttons sit on the edge of the dial: the gold one in the middle is the main action, the small ones on the sides do the rest.
-- Every time you open a page you get a **random photo of a clock** in the background. Phones get a tall photo and computers get a wide one.
-- The text is always easy to read: the photo is darkened and the controls sit on frosted glass. With a mouse, the dial tilts a little and the photo moves behind it, so the page has some depth.
-- The **menu** is the small round button in the bottom-right corner. Click or tap it and the page icons come out one by one. Click it again, or anywhere else, to close it.
+Every warning is an error. `npm run check` runs all of them, and GitHub Actions runs it before every deploy: if anything fails, nothing is deployed.
 
----
+| Command                | What it checks                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `npm run format:check` | Prettier formatting                                                                                           |
+| `npm run typecheck`    | TypeScript 7 strict mode (`noUnused*`, `noUncheckedIndexedAccess`, …)                                         |
+| `npm run lint`         | ESLint with `typescript-eslint` strict type-checked and the **SonarJS** (SonarQube) rules, `--max-warnings 0` |
+| `npm run lint:styles`  | Stylelint (standard SCSS), `--max-warnings 0`                                                                 |
+| `npm run lint:html`    | html-validate                                                                                                 |
+| `npm run unused`       | knip: unused files, exports and dependencies                                                                  |
+| `npm test`             | Vitest with **100% coverage** on the logic (time, countries, photos, timer)                                   |
 
-## Features Overview
-
-### 1. Clock (`index.html`)
-
-The current time, with the day on top (**WED**) and the date at the bottom (**21 OCT ’26**), all inside the dial. The small button at the bottom right of the dial switches between the digital and the analog clock, and the page remembers your choice.
-
-![Analog clock](screenshots/analog.jpg)
-
-### 2. World Clocks (`clocks.html`)
-
-- Tap the country name at the top of the dial to choose another one from the list of 53 countries.
-- The dial shows the time and the date there.
-- For countries with more than one time zone, the time of the main city is used (for example New York for the United States).
-- The page remembers the country you chose. The analog style works here too.
-
-![World clocks](screenshots/clocks.jpg)
-
-### 3. Alarm (`alarm.html`)
-
-- Pick the date and time and the ringtone, side by side under the dial.
-- There are six ringtones: **Classic**, **Chime**, **Bells**, **Digital**, **Pulse** and **Sunrise**. The speaker button lets you listen to the one you chose.
-- The gold bell sets the alarm and the crossed bell stops it.
-
-Keep the page open: the alarm only rings while the page is open.
-
-![Alarm](screenshots/alarm.jpg)
-
-### 4. Stopwatch (`stopwatch.html`)
-
-The gold button starts and pauses. The flag saves a lap and the arrow resets everything. It shows **hours, minutes, seconds and thousandths**.
-
-![Stopwatch](screenshots/stopwatch.jpg)
-
-### 5. Countdown (`countdown.html`)
-
-The minutes and seconds inside the dial are the place where you write the time: the dashed gold line under the numbers shows that you can tap them and type. The default is **2 minutes**. The **+** button adds one minute, even while it is running, and the countdown can be up to 99 minutes. When the time is up you hear the ringtone you chose in the alarm page.
-
-![Countdown](screenshots/countdown.jpg)
-
-### Works on the phone too
-
-<img src="screenshots/mobile.jpg" alt="Clockify on a phone" width="260"> <img src="screenshots/mobile-menu.jpg" alt="The menu open on a phone" width="260">
-
----
-
-## Background Photos
-
-The photos come from [Wikimedia Commons](https://commons.wikimedia.org/), the free media library of Wikipedia. The page asks for "Quality images" of clocks and picks one at random.
-
-- It is completely free: there is no account, no key and no limit to share, so it works on GitHub Pages.
-- Every photo has a free license, so its author and license are written in the bottom-left corner with a link to the photo.
-- If the photo cannot load, the page keeps its dark background.
-- To change the photos of a page, change `data-photo` on its `<body>` (for example `data-photo="clock tower"`).
-
----
-
-## Files
-
-| File | What is inside |
-| --- | --- |
-| `index.html`, `clocks.html`, `alarm.html`, `stopwatch.html`, `countdown.html` | One HTML file for every page |
-| `style.css` | The style of all the pages |
-| `script.js` | The JavaScript of all the pages, with the functions they share |
-| `icon.svg` | The app icon |
-| `sounds/` | The six ringtones |
-| `screenshots/` | The images of this README |
+The build fails on any Sass or Rolldown warning too, and the workflow runs `npm audit`.
 
 ---
 
 ## How to Run It
 
-Open `index.html` in the browser. There is nothing to install, but you need the internet for the fonts, Bootstrap, GSAP and the photos.
+```bash
+npm install
+```
 
-Bootstrap 6 needs a recent browser: Chrome or Edge 130, Firefox 132 or Safari 18 and newer.
+```bash
+npm run dev
+```
+
+Other scripts: `npm run build` (production build in `dist/`), `npm run preview` (serve the build), `npm run format` (fix formatting).
+
+---
+
+## Files
+
+| Path                | What is inside                                        |
+| ------------------- | ----------------------------------------------------- |
+| `*.html`            | One HTML file for every page                          |
+| `src/pages/`        | The TypeScript entry of every page                    |
+| `src/lib/`          | Shared modules: clock, timer, sound, storage, photos… |
+| `src/styles/`       | SCSS partials: tokens, layout, face, controls, icons  |
+| `tests/`            | Unit tests                                            |
+| `public/`           | App icon, ringtones, `robots.txt`                     |
+| `.github/workflows` | Check and deploy to GitHub Pages                      |
 
 ---
 
 ## Accessibility
 
-- Every button works with the keyboard and the focus is always visible. The menu opens with Enter and closes with Escape.
-- The buttons with only an icon have a name for screen readers and a tooltip.
-- Every page has a title for screen readers, even if it is not shown.
-- Screen readers get the messages of the alarm.
-- If your device asks for reduced motion, the animations and the 3D tilt are turned off.
-
----
-
-## Planned Improvements
-
-- Keep the alarm after the page is closed.
-- Show a notification when the alarm rings in another tab.
-- Let the user upload a ringtone.
+- Every control works with the keyboard and the focus is always visible.
+- The time has a readable label for screen readers, and the alarm messages are announced.
+- On narrow phones the side buttons show only the icon, but keep their name for screen readers.
+- With reduced motion turned on, the animations and the parallax are off.
 
 ---
 

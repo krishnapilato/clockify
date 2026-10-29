@@ -1,88 +1,115 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Set an alarm with your favourite ringtone." />
+    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0e0e11" />
+    <title>Alarm · Clockify</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/pages/alarm.ts"></script>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Set an alarm and choose its ringtone.">
-    <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano">
-    <meta name="theme-color" content="#141311">
-    <title>Alarm - Clockify</title>
-    <link rel="icon" href="icon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Outfit:wght@300;400;500&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-    <script src="script.js" defer></script>
-</head>
+  <body>
+    <img
+      class="photo"
+      id="photo"
+      src="data:,"
+      alt=""
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-<body class="user-select-none" data-page="alarm" data-photo="clock" oncontextmenu="return false">
-    <img class="photo" id="photo" alt="">
+    <header class="topbar">
+      <a class="brand" href="index.html">Clockify</a>
+      <p class="credit" id="credit"></p>
+    </header>
 
     <main class="page">
-        <h1 class="visually-hidden">Alarm</h1>
+      <h1 class="visually-hidden">Alarm</h1>
 
-        <div class="dial">
-            <svg viewBox="0 0 200 200" aria-hidden="true">
-                <circle class="face" cx="100" cy="100" r="100" />
-                <circle class="ticks" cx="100" cy="100" r="88" pathLength="60" />
-                <circle class="ticks hours" cx="100" cy="100" r="88" pathLength="12" />
-                <circle class="ring" id="ring" cx="100" cy="100" r="95" pathLength="100" transform="rotate(-90 100 100)" />
-            </svg>
-            <div class="dial-text">
-                <p class="display" id="time" role="timer">00:00:00</p>
-            </div>
-            <button class="round-button dial-left" type="button" data-action="stopAlarm" aria-label="Stop the alarm" title="Stop the alarm">
-                <i class="bi bi-bell-slash" aria-hidden="true"></i>
-            </button>
-            <button class="round-button main dial-middle" type="button" data-action="setAlarm" aria-label="Set the alarm" title="Set the alarm">
-                <i class="bi bi-bell" aria-hidden="true"></i>
-            </button>
-            <button class="round-button dial-right" type="button" data-action="playRingtone" aria-label="Listen to the ringtone" title="Listen to the ringtone">
-                <i class="bi bi-volume-up" aria-hidden="true"></i>
-            </button>
-        </div>
-
-        <div class="panel">
-            <div class="fields">
-                <div class="field">
-                    <label class="form-label label" for="alarm-time">Ring at</label>
-                    <input class="form-control" id="alarm-time" type="datetime-local">
-                </div>
-                <div class="field">
-                    <label class="form-label label" for="ringtone">Ringtone</label>
-                    <select class="form-control" id="ringtone">
-                        <option value="sounds/classic.mp3">Classic</option>
-                        <option value="sounds/chime.wav">Chime</option>
-                        <option value="sounds/bells.wav">Bells</option>
-                        <option value="sounds/digital.wav">Digital</option>
-                        <option value="sounds/pulse.wav">Pulse</option>
-                        <option value="sounds/sunrise.wav">Sunrise</option>
-                    </select>
-                </div>
-            </div>
-
-            <p class="status" id="status" role="status"></p>
-        </div>
-
-        <audio id="sound" src="sounds/classic.mp3" loop></audio>
+      <div class="meta"><span class="label">Time left</span></div>
+      <div class="face">
+        <p class="display" id="time" role="timer" aria-label="00:00:00">
+          <span class="digits" id="top-digits">00</span>
+          <span class="digits accent-digits" id="bottom-digits">00</span>
+          <span class="small-digits" id="small-digits">00</span>
+        </p>
+      </div>
+      <div class="progress" aria-hidden="true">
+        <span class="progress-bar" id="progress"></span>
+      </div>
+      <div class="fields">
+        <label class="field">
+          <span class="label">Ring at</span>
+          <input class="field-control" id="alarm-time" type="datetime-local" />
+        </label>
+        <label class="field">
+          <span class="label">Ringtone</span>
+          <select class="field-control" id="ringtone">
+            <option value="sounds/classic.mp3">Classic</option>
+            <option value="sounds/chime.wav">Chime</option>
+            <option value="sounds/bells.wav">Bells</option>
+            <option value="sounds/digital.wav">Digital</option>
+            <option value="sounds/pulse.wav">Pulse</option>
+            <option value="sounds/sunrise.wav">Sunrise</option>
+          </select>
+        </label>
+      </div>
+      <div class="controls">
+        <button class="pill" id="stop-button" type="button">
+          <i class="bi bi-bell-slash" aria-hidden="true"></i>
+          <span class="pill-text">Stop</span>
+        </button>
+        <button class="pill main" id="set-button" type="button">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="pill-text">Set alarm</span>
+        </button>
+        <button class="pill" id="listen-button" type="button">
+          <i class="bi bi-volume-up" aria-hidden="true"></i>
+          <span class="pill-text">Listen</span>
+        </button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+      <audio id="sound" loop></audio>
     </main>
 
-    <p class="credit" id="credit"></p>
-
-    <nav class="corner-menu" id="corner-menu" aria-label="Pages">
-        <button class="round-button corner-menu-button" id="corner-menu-button" type="button" aria-label="Open the menu" title="Menu" aria-expanded="false" aria-controls="corner-menu-links">
-            <i class="bi bi-list" aria-hidden="true"></i>
-        </button>
-        <ul class="corner-menu-links" id="corner-menu-links">
-            <li><a class="round-button corner-menu-link" href="index.html" aria-label="Clock" title="Clock"><i class="bi bi-clock" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="clocks.html" aria-label="World clocks" title="World clocks"><i class="bi bi-globe-americas" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="alarm.html" aria-label="Alarm" title="Alarm" aria-current="page"><i class="bi bi-alarm" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="stopwatch.html" aria-label="Stopwatch" title="Stopwatch"><i class="bi bi-stopwatch" aria-hidden="true"></i></a></li>
-            <li><a class="round-button corner-menu-link" href="countdown.html" aria-label="Countdown" title="Countdown"><i class="bi bi-hourglass-split" aria-hidden="true"></i></a></li>
-        </ul>
+    <nav class="dock" aria-label="Pages">
+      <ul class="dock-links">
+        <li>
+          <a class="dock-link" href="index.html">
+            <i class="bi bi-clock" aria-hidden="true"></i>
+            <span>Clock</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="clocks.html">
+            <i class="bi bi-globe-americas" aria-hidden="true"></i>
+            <span>World</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="alarm.html" aria-current="page">
+            <i class="bi bi-alarm" aria-hidden="true"></i>
+            <span>Alarm</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="stopwatch.html">
+            <i class="bi bi-stopwatch" aria-hidden="true"></i>
+            <span>Stopwatch</span>
+          </a>
+        </li>
+        <li>
+          <a class="dock-link" href="countdown.html">
+            <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+            <span>Timer</span>
+          </a>
+        </li>
+      </ul>
     </nav>
-</body>
-
+  </body>
 </html>
