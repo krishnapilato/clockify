@@ -1,7 +1,6 @@
 import { gsap } from "gsap";
 import { setPlayButton, showDigits } from "#lib/dial";
 import { getElement, onClick } from "#lib/dom";
-import { showProgress } from "#lib/motion";
 import { startPage } from "#lib/page";
 import { pad, timeText } from "#lib/time";
 
@@ -25,7 +24,6 @@ const showStopwatch = (): void => {
     thousandths(time),
     timeText(totalSeconds),
   );
-  showProgress(((time % 60_000) / 60_000) * 100, true);
 };
 
 const start = (): void => {
@@ -44,7 +42,9 @@ const pause = (): void => {
 };
 
 const reset = (): void => {
-  if (running) pause();
+  if (running) {
+    pause();
+  }
   savedTime = 0;
   laps = 0;
   lapList.replaceChildren();
@@ -58,7 +58,9 @@ const span = (className: string, text: string): HTMLSpanElement =>
   });
 
 const addLap = (): void => {
-  if (!running) return;
+  if (!running) {
+    return;
+  }
   laps += 1;
   const time = elapsed();
   const lap = Object.assign(document.createElement("li"), { className: "lap" });
@@ -67,12 +69,21 @@ const addLap = (): void => {
     span("lap-time", timeText(Math.floor(time / 1000)) + thousandths(time)),
   );
   lapList.prepend(lap);
-  gsap.from(lap, { autoAlpha: 0, y: -12, duration: 0.4, ease: "power3.out" });
+  gsap.from(lap, {
+    autoAlpha: 0,
+    y: -10,
+    duration: 0.55,
+    ease: "power2.out",
+    clearProps: "transform",
+  });
 };
 
 onClick("play-button", () => {
-  if (running) pause();
-  else start();
+  if (running) {
+    pause();
+  } else {
+    start();
+  }
 });
 onClick("reset-button", reset);
 onClick("lap-button", addLap);

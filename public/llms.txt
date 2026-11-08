@@ -1,6 +1,6 @@
 # Clockify
 
-> A simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown. Everything runs in the browser; settings are encrypted on the device.
+> A simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown. Everything runs in the browser; settings are encrypted on the device. No third-party photo backgrounds.
 
 - [Clock](index.html): current time, digital or analog
 - [World clocks](clocks.html): time in 53 countries

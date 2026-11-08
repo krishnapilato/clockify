@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["src/pages/*.ts"],
+  "entry": ["src/pages/*.ts", "src/styles/main.scss", "src/styles/vendor.css"],
   "project": ["src/**/*.{ts,sass,scss}", "tests/**/*.ts"],
-  "ignoreDependencies": ["bootstrap-icons"]
+  "ignoreDependencies": ["@fontsource-variable/archivo", "bootstrap", "bootstrap-icons"]
 }

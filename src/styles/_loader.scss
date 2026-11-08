@@ -1,0 +1,100 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 45%, rgb(255 255 255 / 92%), transparent 72%),
+    linear-gradient(165deg, #f5f6f8 0%, var(--paper) 48%, #e6e8ec 100%);
+  color: var(--ink);
+  text-align: center;
+}
+
+.loader-inner {
+  display: grid;
+  justify-items: center;
+  gap: 1.35rem;
+  width: min(18rem, 78vw);
+}
+
+.loader-brand {
+  margin: 0;
+  padding-inline-start: 0.42em;
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.loader-mark {
+  position: relative;
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.loader-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
+
+.loader-ring-soft {
+  position: absolute;
+  inset: 0.45rem;
+  border: 1px solid var(--faint);
+  border-radius: 50%;
+}
+
+.loader-hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 1.15rem;
+  background: var(--graphite);
+  transform-origin: 50% 0;
+  translate: -50% 0;
+  animation: loader-hand 2.4s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.loader-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--ink);
+  translate: -50% -50%;
+}
+
+.loader-caption {
+  margin: 0;
+  padding-inline-start: 0.28em;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+@keyframes loader-hand {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+body.is-loading {
+  .page,
+  .dock {
+    pointer-events: none;
+  }
+}

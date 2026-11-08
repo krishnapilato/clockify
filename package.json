@@ -1,6 +1,6 @@
 {
   "name": "clockify",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "A simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown.",
@@ -26,27 +26,27 @@
   },
   "dependencies": {
     "@fontsource-variable/archivo": "5.3.0",
-    "bootstrap": "6.0.0-alpha.1",
+    "bootstrap": "5.3.8",
     "bootstrap-icons": "1.13.2",
-    "gsap": "3.15.0"
+    "gsap": "3.15.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/node": "26.6.6",
-    "@vitest/coverage-v8": "5.0.5",
-    "eslint": "10.13.0",
+    "@vitest/coverage-v8": "5.1.0",
+    "eslint": "10.14.0",
     "eslint-plugin-sonarjs": "4.2.2",
-    "globals": "17.13.0",
-    "html-validate": "11.17.0",
-    "knip": "6.43.0",
+    "globals": "17.14.0",
+    "html-validate": "11.19.0",
+    "knip": "6.44.2",
     "prettier": "3.9.10",
-    "sass": "1.107.0",
+    "sass": "1.108.1",
     "stylelint": "17.16.0",
     "stylelint-config-standard-scss": "17.0.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.1",
     "typescript7": "npm:typescript@7.0.2",
-    "vite": "8.3.5",
-    "vitest": "5.0.5"
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
   }
 }

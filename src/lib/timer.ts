@@ -16,7 +16,8 @@ export const createTimer = (onTick: (timeLeft: number) => void, onDone: () => vo
     const left = timeLeft();
     onTick(left);
     if (left > 0) {
-      tickTimer = setTimeout(tick, left % 1000 || 1000);
+      const delay = left % 1000;
+      tickTimer = setTimeout(tick, delay === 0 ? 1000 : delay);
       return;
     }
     running = false;

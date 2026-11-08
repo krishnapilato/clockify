@@ -8,13 +8,15 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self'",
-  "img-src 'self' data: https://upload.wikimedia.org https://thumb.wikimedia.org",
-  "connect-src 'self' https://commons.wikimedia.org",
+  "img-src 'self' data:",
+  "connect-src 'self'",
   "font-src 'self'",
   "media-src 'self'",
   "base-uri 'self'",
   "form-action 'none'",
   "object-src 'none'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
 ].join("; ");
 
 const securityPolicy = (): Plugin => ({
@@ -53,7 +55,9 @@ export default defineConfig({
         pages.map((page) => [page, resolve(import.meta.dirname, `${page}.html`)]),
       ),
       onLog: (level, log, handler) => {
-        if (level === "warn") failOnWarning(log.message);
+        if (level === "warn") {
+          failOnWarning(log.message);
+        }
         handler(level, log);
       },
     },
@@ -62,7 +66,7 @@ export default defineConfig({
     include: ["tests/**/*.test.ts"],
     coverage: {
       provider: "v8",
-      include: ["src/lib/time.ts", "src/lib/countries.ts", "src/lib/photos.ts", "src/lib/timer.ts"],
+      include: ["src/lib/time.ts", "src/lib/countries.ts", "src/lib/timer.ts"],
       thresholds: {
         lines: 100,
         functions: 100,

@@ -25,7 +25,9 @@ const loadKey = async (): Promise<CryptoKey> => {
   const saved: unknown = await request(
     database.transaction("keys").objectStore("keys").get("settings"),
   );
-  if (saved instanceof CryptoKey) return saved;
+  if (saved instanceof CryptoKey) {
+    return saved;
+  }
   const key = await crypto.subtle.generateKey(ALGORITHM, false, ["encrypt", "decrypt"]);
   await request(database.transaction("keys", "readwrite").objectStore("keys").put(key, "settings"));
   return key;
@@ -51,7 +53,9 @@ export const saveSetting = async (name: string, value: string): Promise<void> =>
 
 export const readSetting = async (name: string): Promise<string | undefined> => {
   const stored = localStorage.getItem(name);
-  if (stored === null) return undefined;
+  if (stored === null) {
+    return undefined;
+  }
   try {
     const bytes = Uint8Array.fromBase64(stored);
     const opened = await crypto.subtle.decrypt(

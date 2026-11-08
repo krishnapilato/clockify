@@ -6,28 +6,33 @@
     <meta name="description" content="Count down from any number of minutes and seconds." />
     <meta name="author" content="Khova Krishna Pilato, Pasquale Marciano" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0e0e11" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#eef0f2" />
     <title>Countdown · Clockify</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <style>
+      body {
+        visibility: hidden;
+      }
+    </style>
+    <link rel="stylesheet" href="/src/styles/vendor.css" />
+    <link rel="stylesheet" href="/src/styles/main.scss" />
     <script type="module" src="/src/pages/countdown.ts"></script>
   </head>
 
-  <body>
-    <img
-      class="photo"
-      id="photo"
-      src="data:,"
-      alt=""
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-
-    <header class="topbar">
-      <a class="brand" href="index.html">Clockify</a>
-      <p class="credit" id="credit"></p>
-    </header>
-
+  <body class="is-loading">
+    <div class="loader" id="loader" role="status" aria-live="polite" aria-busy="true">
+      <div class="loader-inner">
+        <p class="loader-brand">Clockify</p>
+        <div class="loader-mark" aria-hidden="true">
+          <span class="loader-ring"></span>
+          <span class="loader-ring-soft"></span>
+          <span class="loader-hand"></span>
+          <span class="loader-pin"></span>
+        </div>
+        <p class="loader-caption">Loading</p>
+      </div>
+    </div>
     <main class="page">
       <h1 class="visually-hidden">Countdown</h1>
 

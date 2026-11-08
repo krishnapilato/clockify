@@ -27,13 +27,17 @@ export const loadRingtone = async (): Promise<Ringtone> => {
 };
 
 export const saveRingtone = (file: string): void => {
-  if (!isRingtone(file)) return;
+  if (!isRingtone(file)) {
+    return;
+  }
   void saveSetting("ringtone", file);
   alarmSound().src = file;
 };
 
 export const previewRingtone = (file: string): void => {
-  if (!isRingtone(file)) return;
+  if (!isRingtone(file)) {
+    return;
+  }
   preview?.pause();
   preview = new Audio(file);
   preview.play().catch(() => undefined);

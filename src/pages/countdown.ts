@@ -25,7 +25,9 @@ const showTimeLeft = (left: number): void => {
 };
 
 const setEditable = (editable: boolean): void => {
-  for (const field of fields) field.readOnly = !editable;
+  for (const field of fields) {
+    field.readOnly = !editable;
+  }
 };
 
 const timer = createTimer(showTimeLeft, () => {
@@ -104,8 +106,11 @@ for (const field of fields) {
 }
 
 onClick("play-button", () => {
-  if (timer.isRunning()) pause();
-  else start();
+  if (timer.isRunning()) {
+    pause();
+  } else {
+    start();
+  }
 });
 onClick("reset-button", reset);
 onClick("minute-button", addMinute);

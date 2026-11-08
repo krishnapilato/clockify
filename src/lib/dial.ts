@@ -1,12 +1,14 @@
 import { gsap } from "gsap";
-import { getElement, setIcon, setText } from "./dom";
-import { showProgress } from "./motion";
+import { getElement, hasElement, setIcon, setText } from "./dom";
 import { readSetting, saveSetting } from "./storage";
 import { handAngles, pad, readClock, splitDuration, timeText } from "./time";
+
+const SOFT_EASE = "power2.out";
 
 let clockTimer: ReturnType<typeof setTimeout> | undefined;
 let zone: string | undefined;
 let analog = false;
+let handsReady = false;
 
 export const isAnalog = (): boolean => analog;
 
@@ -37,13 +39,16 @@ const numberLabel = (hour: number): SVGTextElement => {
   return label;
 };
 
-const turnHand = (id: string, degrees: number): void => {
-  gsap.to(`#${id}`, {
+const turnHand = (id: string, degrees: number, instant: boolean): void => {
+  const props = {
     rotation: `${String(degrees)}_short`,
     svgOrigin: "100 100",
-    duration: 0.5,
-    ease: "back.out(3)",
-  });
+  };
+  if (instant) {
+    gsap.set(`#${id}`, props);
+  } else {
+    gsap.to(`#${id}`, { ...props, duration: 0.55, ease: SOFT_EASE });
+  }
 };
 
 const showClock = (): void => {
@@ -52,10 +57,15 @@ const showClock = (): void => {
   showDuration(clock.hours * 3600 + clock.minutes * 60 + clock.seconds);
   setText("weekday", clock.weekday);
   setText("date", clock.date);
-  showProgress((clock.seconds / 60) * 100);
-  turnHand("hour-hand", hour);
-  turnHand("minute-hand", minute);
-  turnHand("second-hand", second);
+  if (hasElement("local-time")) {
+    const local = readClock(new Date());
+    setText("local-time", `Local ${pad(local.hours)}:${pad(local.minutes)}:${pad(local.seconds)}`);
+  }
+  const instant = !handsReady;
+  turnHand("hour-hand", hour, instant);
+  turnHand("minute-hand", minute, instant);
+  turnHand("second-hand", second, instant);
+  handsReady = true;
   clockTimer = setTimeout(showClock, 1000 - (Date.now() % 1000));
 };
 
@@ -65,21 +75,28 @@ export const startClock = (timeZone?: string): void => {
   showClock();
 };
 
-const showStyle = (): void => {
-  gsap.to("#analog", { opacity: analog ? 1 : 0, duration: 0.6 });
+const showStyle = (animate: boolean): void => {
+  const duration = animate ? 0.65 : 0;
+  gsap.to("#analog", { opacity: analog ? 1 : 0, duration, ease: SOFT_EASE });
   gsap.to("#time", {
     opacity: analog ? 0 : 1,
-    scale: analog ? 0.85 : 1,
-    duration: 0.6,
+    scale: analog ? 0.94 : 1,
+    duration,
+    ease: SOFT_EASE,
   });
-  if (analog) {
-    gsap.from("#numbers text", {
-      opacity: 0,
-      scale: 0,
-      transformOrigin: "50% 50%",
-      duration: 0.6,
-      stagger: 0.04,
-    });
+  if (animate && analog) {
+    gsap.fromTo(
+      "#numbers text",
+      { opacity: 0, scale: 0.92 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.55,
+        stagger: 0.03,
+        ease: SOFT_EASE,
+        transformOrigin: "50% 50%",
+      },
+    );
   }
   const button = getElement("style-button", HTMLButtonElement);
   setIcon(button, analog ? "123" : "clock", analog ? "Digital" : "Analog");
@@ -90,10 +107,10 @@ export const setUpClockStyle = async (): Promise<void> => {
   getElement("numbers", SVGGElement).replaceChildren(
     ...Array.from({ length: 12 }, (_, index) => numberLabel(index + 1)),
   );
-  showStyle();
+  showStyle(false);
   getElement("style-button", HTMLButtonElement).addEventListener("click", () => {
     analog = !analog;
     void saveSetting("clockStyle", analog ? "analog" : "digital");
-    showStyle();
+    showStyle(true);
   });
 };
