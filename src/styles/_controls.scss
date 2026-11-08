@@ -9,53 +9,48 @@
 }
 
 .pill {
-  @include glass(var(--glass-strong));
+  @include panel;
 
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
   height: 3.25rem;
   padding: 0 1.4rem;
-  border-radius: 2rem;
-  box-shadow:
-    0 0.75rem 1.5rem rgb(0 0 0 / 30%),
-    var(--sheen);
-  color: var(--paper);
+  border-radius: var(--radius);
+  color: var(--ink);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   transition:
     scale 0.2s,
     background-color 0.2s,
-    filter 0.2s;
+    border-color 0.2s;
 
   .bi {
     font-size: 1.1rem;
   }
 
   &:active {
-    scale: 0.96;
+    scale: 0.97;
   }
 
   @include hover {
-    background: rgb(40 40 46 / 75%);
+    background: var(--paper);
+    border-color: var(--line-strong);
   }
 
   &.main {
     height: 3.75rem;
     padding: 0 2rem;
-    border-color: transparent;
-    background: var(--accent);
-    box-shadow:
-      0 0.75rem 2rem rgb(255 95 109 / 40%),
-      var(--sheen);
-    color: var(--ink);
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
     font-size: 0.95rem;
     font-weight: 600;
 
     @include hover {
-      background: var(--accent);
-      filter: brightness(108%);
+      background: #2a2e36;
+      border-color: #2a2e36;
     }
   }
 }
@@ -74,17 +69,14 @@
 }
 
 .field-control {
-  @include glass(var(--glass-strong));
+  @include panel;
 
   width: 100%;
   min-width: 0;
   min-height: 3rem;
   padding: 0.6rem 1.1rem;
-  border-radius: 2rem;
-  box-shadow:
-    0 0.75rem 1.5rem rgb(0 0 0 / 30%),
-    var(--sheen);
-  color: var(--paper);
+  border-radius: var(--radius);
+  color: var(--ink);
   font: inherit;
   font-size: 0.85rem;
   text-align: center;
@@ -94,36 +86,35 @@
     background-color 0.2s;
 
   &:focus {
-    border-color: var(--amber);
+    border-color: var(--graphite);
     outline: none;
   }
 
   option {
-    background: var(--ink);
+    background: var(--surface);
   }
 
   @include hover {
-    background: rgb(40 40 46 / 75%);
+    background: var(--paper);
   }
 }
 
 .status {
   min-height: 1.5rem;
-  color: var(--paper);
+  color: var(--ink);
   font-size: 0.9rem;
-  text-shadow: 0 1px 8px rgb(0 0 0 / 80%);
   text-wrap: balance;
 }
 
 .laps {
-  @include glass;
+  @include panel;
 
   width: min(100%, 22rem);
   max-height: 40dvh;
   overflow-y: auto;
   margin: 0;
   padding: 0.5rem 1.25rem;
-  border-radius: 1.75rem;
+  border-radius: var(--radius);
   list-style: none;
   scrollbar-width: thin;
 

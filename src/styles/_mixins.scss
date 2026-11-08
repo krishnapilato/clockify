@@ -1,8 +1,6 @@
-@mixin glass($tint: var(--glass)) {
-  border: 1px solid var(--edge);
-  background: $tint;
-  box-shadow: var(--shadow), var(--sheen);
-  backdrop-filter: var(--blur);
+@mixin panel($fill: var(--surface)) {
+  border: 1px solid var(--line);
+  background: $fill;
 }
 
 @mixin hover {

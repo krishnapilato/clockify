@@ -1,6 +1,6 @@
 # Clockify
 
-Clockify is a simple and elegant clock with world clocks, an alarm, a stopwatch and a countdown.
+Clockify is a Swiss-instrument clock with world clocks, an alarm, a stopwatch and a countdown — privacy-first, local-only, no accounts.
 
 **Live: [krishnapilato.github.io/clockify](https://krishnapilato.github.io/clockify/)**
 
@@ -30,13 +30,15 @@ Measured with Lighthouse 13.6 on the production build (`npm run build && npm run
 
 ## The Design
 
-The redesign is based on the oversized-numbers clock shots on Dribbble (like the _World Clock App_ concepts), with a warm amber-to-coral accent:
+Soft daylight paper, ink condensed numerals, hairline rules, and a cool graphite accent — built for calm standby, not glass / glow / pill chrome.
 
-- **Huge condensed numbers** fill the screen: hours above minutes on phones, side by side on wide screens. The seconds sit small next to them.
-- A **thin gradient line** under the numbers shows the progress of the minute, the alarm or the countdown.
-- **Pill buttons with a label** (Reset · Start · Lap), with the main action in the gradient.
-- A **floating glass dock** at the bottom to move between the five pages.
-- A **random free photo** in the background on every visit: landscapes, mountains, sea, aurora, skylines, bridges… darkened so the numbers are always readable. Only the author is shown in the top-right corner, with a link to the photo and its license.
+- **Huge condensed numbers** fill the screen: hours above minutes on phones, side by side on wide screens. Seconds sit small beside them.
+- **World clocks** keep a quiet local-time readout under the selected zone for comparison.
+- A **hairline progress rule** on Alarm and Countdown shows remaining time (not a decorative minute bar).
+- **Instrument controls** with a clear primary action — soft radius, no frosted glass.
+- A **quiet dock** at the bottom; the current page is marked with a hairline border and weight.
+- **Designed atmosphere only** (paper gradient + faint grid). No third-party photo backgrounds.
+- A short **centered loader** (Clockify + chronograph mark) when you open a section, then a soft GSAP reveal.
 - **Fully responsive**: phones, tablets, desktops, and phones in landscape.
 
 | Analog                            | World clocks                     |
@@ -53,31 +55,30 @@ The redesign is based on the oversized-numbers clock shots on Dribbble (like the
 
 ## Features
 
-1. **Clock** (`index.html`): the time, the day and the date. One button switches between the digital and the analog clock.
-2. **World clocks** (`clocks.html`): choose one of 53 countries from the pill above the numbers.
+1. **Clock** (`index.html`): the time, the day and the date. One button switches between digital and analog.
+2. **World clocks** (`clocks.html`): choose one of 53 countries; local time stays visible in a smaller label.
 3. **Alarm** (`alarm.html`): pick the date, the time and one of six ringtones. Keep the page open: the alarm rings only while the page is open.
 4. **Stopwatch** (`stopwatch.html`): minutes, seconds and thousandths, with laps.
-5. **Countdown** (`countdown.html`): tap the numbers and type the minutes and seconds, up to 99 minutes. The **1 min** button adds a minute, even while it runs.
+5. **Countdown** (`countdown.html`): tap the numbers and type minutes and seconds, up to 99 minutes. The **1 min** button adds a minute, even while it runs.
 
 ---
 
 ## Privacy First
 
 - No accounts, no tracking, no analytics, no cookies.
+- No third-party content: the UI is self-contained.
 - Your choices (clock style, country, ringtone) are **encrypted** with AES-GCM 256 before they are saved in `localStorage`. The key is a non-extractable Web Crypto key kept in IndexedDB, so the raw key can never be read or exported.
-- Values read back from storage are checked against a fixed list (ringtones, countries, clock styles) before they are used.
-- The photos and the Wikimedia API are loaded **without cookies and without referrer**.
-- A strict **Content Security Policy** allows only the site itself and Wikimedia.
+- Values read back from storage are checked against a fixed allowlist before they are used.
+- A strict **Content Security Policy** allows only the site itself (`frame-ancestors 'none'`, `upgrade-insecure-requests`).
 
 ---
 
 ## Stack
 
 - **Vite 8** multi-page build, **TypeScript 7** (ESNext, strictest options), **SCSS** with the Sass module system
-- **GSAP 3** for the animations
-- **Bootstrap 6.0.0 alpha 1** (Reboot) and **Bootstrap Icons** (only the 17 icons we use, as SVG masks)
+- **GSAP 3** for soft luxury motion
+- **Bootstrap 5.3.8** (Reboot only) and **Bootstrap Icons** (only the icons we use, as SVG masks)
 - **Archivo** variable font (width axis for the condensed numbers), self-hosted
-- **Wikimedia Commons API** for the photos (free, no key)
 - **Node.js ≥ 26.13 LTS**
 
 ---
@@ -86,15 +87,15 @@ The redesign is based on the oversized-numbers clock shots on Dribbble (like the
 
 Every warning is an error. `npm run check` runs all of them, and GitHub Actions runs it before every deploy: if anything fails, nothing is deployed.
 
-| Command                | What it checks                                                                                                |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `npm run format:check` | Prettier formatting                                                                                           |
-| `npm run typecheck`    | TypeScript 7 strict mode (`noUnused*`, `noUncheckedIndexedAccess`, …)                                         |
-| `npm run lint`         | ESLint with `typescript-eslint` strict type-checked and the **SonarJS** (SonarQube) rules, `--max-warnings 0` |
-| `npm run lint:styles`  | Stylelint (standard SCSS), `--max-warnings 0`                                                                 |
-| `npm run lint:html`    | html-validate                                                                                                 |
-| `npm run unused`       | knip: unused files, exports and dependencies                                                                  |
-| `npm test`             | Vitest with **100% coverage** on the logic (time, countries, photos, timer)                                   |
+| Command                | What it checks                                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `npm run format:check` | Prettier formatting                                                                                          |
+| `npm run typecheck`    | TypeScript 7 strict mode (`erasableSyntaxOnly`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, …) |
+| `npm run lint`         | ESLint with `typescript-eslint` strict type-checked, SonarJS, and `strict-boolean-expressions`               |
+| `npm run lint:styles`  | Stylelint (standard SCSS), `--max-warnings 0`                                                                |
+| `npm run lint:html`    | html-validate (recommended + document)                                                                       |
+| `npm run unused`       | knip: unused files, exports and dependencies                                                                 |
+| `npm test`             | Vitest with **100% coverage** on the logic (time, countries, timer)                                          |
 
 The build fails on any Sass or Rolldown warning too, and the workflow runs `npm audit`.
 
@@ -120,10 +121,11 @@ Other scripts: `npm run build` (production build in `dist/`), `npm run preview` 
 | ------------------- | ----------------------------------------------------- |
 | `*.html`            | One HTML file for every page                          |
 | `src/pages/`        | The TypeScript entry of every page                    |
-| `src/lib/`          | Shared modules: clock, timer, sound, storage, photos… |
-| `src/styles/`       | SCSS partials: tokens, layout, face, controls, icons  |
+| `src/lib/`          | Shared modules: clock, timer, sound, storage, motion… |
+| `src/styles/`       | SCSS: tokens, layout, face, controls, loader, icons   |
 | `tests/`            | Unit tests                                            |
 | `public/`           | App icon, ringtones, `robots.txt`                     |
+| `screenshots/`      | README images                                         |
 | `.github/workflows` | Check and deploy to GitHub Pages                      |
 
 ---
@@ -133,7 +135,7 @@ Other scripts: `npm run build` (production build in `dist/`), `npm run preview` 
 - Every control works with the keyboard and the focus is always visible.
 - The time has a readable label for screen readers, and the alarm messages are announced.
 - On narrow phones the side buttons show only the icon, but keep their name for screen readers.
-- With reduced motion turned on, the animations and the parallax are off.
+- Soft luxury motion (page reveal, hands, dock, tilt) runs through GSAP.
 
 ---
 

@@ -10,10 +10,10 @@
 }
 
 .dot {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.2rem;
+  height: 0.2rem;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--graphite);
 }
 
 .face {
@@ -34,7 +34,6 @@
   font-stretch: 62%;
   line-height: 0.8;
   letter-spacing: -0.02em;
-  text-shadow: 0 0.5rem 3rem rgb(0 0 0 / 35%);
   padding-inline: 0.45em;
 
   @media (orientation: landscape) {
@@ -54,12 +53,11 @@
 
 .digits {
   display: block;
+  color: var(--ink);
 }
 
 .accent-digits {
-  background: var(--accent);
-  background-clip: text;
-  color: transparent;
+  color: var(--graphite);
 }
 
 .small-digits {
@@ -71,7 +69,6 @@
   font-weight: 400;
   font-stretch: 100%;
   line-height: 1;
-  text-shadow: none;
 }
 
 .time-input {
@@ -81,19 +78,19 @@
   border: 0;
   border-radius: 0.05em;
   background: transparent;
-  color: var(--paper);
+  color: var(--ink);
   font: inherit;
   text-align: center;
-  caret-color: var(--amber);
+  caret-color: var(--graphite);
   transition: background-color 0.2s;
 
   & + & {
-    color: var(--amber);
+    color: var(--graphite);
   }
 
   &:focus {
     outline: none;
-    background-color: rgb(255 197 107 / 12%);
+    background-color: rgb(90 101 114 / 10%);
   }
 
   &[readonly] {
@@ -102,7 +99,7 @@
 
   &:not([readonly]) {
     @include hover {
-      background-color: rgb(255 255 255 / 6%);
+      background-color: rgb(22 24 28 / 4%);
     }
   }
 }
@@ -118,7 +115,7 @@
   }
 
   text {
-    fill: var(--paper);
+    fill: var(--ink);
     font-family: var(--font);
     font-size: 17px;
     font-weight: 300;
@@ -134,13 +131,14 @@
 }
 
 .analog-face {
-  fill: rgb(16 16 20 / 45%);
-  stroke: var(--edge);
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1;
 }
 
 .ticks {
   fill: none;
-  stroke: var(--paper);
+  stroke: var(--ink);
   stroke-width: 3;
   stroke-dasharray: 0.06 0.94;
   stroke-dashoffset: 0.03;
@@ -156,51 +154,54 @@
 
 .hour-hand,
 .minute-hand {
-  fill: var(--paper);
+  fill: var(--ink);
 }
 
 .second-hand {
-  fill: var(--coral);
-  stroke: var(--coral);
+  fill: var(--graphite);
+  stroke: var(--graphite);
   stroke-width: 1.2;
 }
 
 .pin {
-  fill: var(--amber);
-  stroke: var(--ink);
+  fill: var(--graphite);
+  stroke: var(--paper);
   stroke-width: 1.5;
+}
+
+.local-time {
+  min-height: 1rem;
+  letter-spacing: 0.14em;
 }
 
 .progress {
   width: min(78vw, 24rem);
-  height: 3px;
+  height: 1px;
   overflow: hidden;
-  border-radius: 3px;
   background: var(--faint);
 }
 
 .progress-bar {
   display: block;
   height: 100%;
-  background: var(--accent);
+  background: var(--graphite);
   transform: scaleX(0);
   transform-origin: left;
 }
 
 .ringing .display {
-  filter: drop-shadow(0 0 2.5rem rgb(255 95 109 / 55%));
+  color: var(--graphite);
 }
 
 .country {
-  @include glass(var(--glass-strong));
+  @include panel;
 
   position: relative;
   display: flex;
   align-items: center;
   gap: 0.6em;
   padding: 0.5em 1.1em;
-  border-radius: 2em;
-  box-shadow: none;
+  border-radius: var(--radius);
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -220,11 +221,11 @@
   }
 
   &:focus-within {
-    outline: 2px solid var(--amber);
+    outline: 2px solid var(--graphite);
     outline-offset: 3px;
   }
 
   @include hover {
-    background: rgb(40 40 46 / 75%);
+    background: var(--paper);
   }
 }

@@ -12,7 +12,17 @@ const showCountry = (name?: string): void => {
   picker.value = country;
   setText("country-name", country);
   startClock(zone);
-  gsap.fromTo("#time", { y: 8, opacity: 0 }, { y: 0, opacity: isAnalog() ? 0 : 1, duration: 0.5 });
+  gsap.fromTo(
+    "#time",
+    { y: 12, autoAlpha: 0 },
+    {
+      y: 0,
+      autoAlpha: isAnalog() ? 0 : 1,
+      duration: 0.55,
+      ease: "power2.out",
+      clearProps: "transform",
+    },
+  );
 };
 
 picker.append(...COUNTRIES.map(({ name }) => new Option(name)));
