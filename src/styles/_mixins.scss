@@ -10,3 +10,69 @@
     }
   }
 }
+
+/* Small capitals spaced like a tailor's label. */
+@mixin caps($size: 0.7rem, $spacing: 0.28em) {
+  font-size: $size;
+  font-weight: 600;
+  letter-spacing: $spacing;
+  text-transform: uppercase;
+}
+
+/* A hairline select that opens an ivory list where `appearance: base-select` is supported. */
+@mixin select-control {
+  appearance: none;
+  padding-inline-end: 1.75em;
+  border: 0;
+  border-radius: 0;
+  background: url("bootstrap-icons/icons/chevron-down.svg") right center / 0.75em no-repeat;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+
+  @supports (appearance: base-select) {
+    &,
+    &::picker(select) {
+      appearance: base-select;
+    }
+
+    &::picker-icon {
+      display: none;
+    }
+
+    &::picker(select) {
+      max-height: min(60dvh, 28rem);
+      margin-block: 0.75rem;
+      padding-block: 0.5rem;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      box-shadow: 0 1.5rem 3rem rgb(20 18 15 / 12%);
+      scrollbar-color: var(--line-strong) transparent;
+      scrollbar-width: thin;
+    }
+
+    option {
+      gap: 0.75rem;
+      min-height: 2.75rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-transform: none;
+
+      &::checkmark {
+        color: var(--gold);
+      }
+
+      &:checked {
+        font-weight: 600;
+      }
+
+      &:focus-visible,
+      &:hover {
+        outline: none;
+        background: var(--gold-soft);
+      }
+    }
+  }
+}

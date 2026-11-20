@@ -1,6 +1,6 @@
-import { gsap } from "gsap";
 import { setPlayButton, showDigits } from "#lib/dial";
 import { getElement, onClick } from "#lib/dom";
+import { tween } from "#lib/motion";
 import { startPage } from "#lib/page";
 import { pad, timeText } from "#lib/time";
 
@@ -10,6 +10,7 @@ let running = false;
 let startTime = 0;
 let savedTime = 0;
 let laps = 0;
+let frame = 0;
 
 const elapsed = (): number => (running ? savedTime + performance.now() - startTime : savedTime);
 
@@ -26,17 +27,22 @@ const showStopwatch = (): void => {
   );
 };
 
+const tick = (): void => {
+  showStopwatch();
+  frame = requestAnimationFrame(tick);
+};
+
 const start = (): void => {
   running = true;
   startTime = performance.now();
-  gsap.ticker.add(showStopwatch);
+  frame = requestAnimationFrame(tick);
   setPlayButton(true);
 };
 
 const pause = (): void => {
   savedTime = elapsed();
   running = false;
-  gsap.ticker.remove(showStopwatch);
+  cancelAnimationFrame(frame);
   showStopwatch();
   setPlayButton(false);
 };
@@ -69,13 +75,11 @@ const addLap = (): void => {
     span("lap-time", timeText(Math.floor(time / 1000)) + thousandths(time)),
   );
   lapList.prepend(lap);
-  gsap.from(lap, {
-    autoAlpha: 0,
-    y: -10,
-    duration: 0.55,
-    ease: "power2.out",
-    clearProps: "transform",
-  });
+  void tween(
+    lap,
+    { opacity: "1", translate: "0 0" },
+    { from: { opacity: "0", translate: "0 -10px" } },
+  );
 };
 
 onClick("play-button", () => {

@@ -12,7 +12,8 @@
   },
   "scripts": {
     "dev": "vite --open",
-    "build": "vite build",
+    "build": "vite build && npm run size",
+    "size": "node scripts/size-budget.js",
     "preview": "vite preview --open",
     "typecheck": "node node_modules/typescript7/bin/tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
@@ -25,16 +26,14 @@
     "check": "npm run format:check && npm run typecheck && npm run lint && npm run lint:styles && npm run lint:html && npm run unused && npm run test"
   },
   "dependencies": {
-    "@fontsource-variable/archivo": "5.3.0",
-    "bootstrap": "5.3.9",
-    "bootstrap-icons": "1.13.2",
-    "gsap": "3.15.1"
+    "bootstrap-icons": "1.13.2"
   },
   "overrides": {
     "minimatch": "11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@fontsource-variable/bodoni-moda": "5.3.0",
     "@types/node": "26.6.6",
     "@vitest/coverage-v8": "5.1.1",
     "eslint": "10.15.0",

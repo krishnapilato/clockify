@@ -1,0 +1,41 @@
+/* The few resets this site needs, in place of a 10 kB vendor reboot. */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+html {
+  text-size-adjust: 100%;
+}
+
+body,
+h1 {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+[type="button"] {
+  cursor: pointer;
+}
+
+svg {
+  vertical-align: middle;
+}
+
+[hidden] {
+  display: none !important;
+}

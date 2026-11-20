@@ -1,9 +1,7 @@
-import { gsap } from "gsap";
 import { getElement, hasElement, setIcon, setText } from "./dom";
+import { setStyle, tween } from "./motion";
 import { readSetting, saveSetting } from "./storage";
 import { handAngles, pad, readClock, splitDuration, timeText } from "./time";
-
-const SOFT_EASE = "power2.out";
 
 let clockTimer: ReturnType<typeof setTimeout> | undefined;
 let zone: string | undefined;
@@ -29,25 +27,35 @@ export const setPlayButton = (playing: boolean): void => {
   setIcon(button, playing ? "pause-fill" : "play-fill", playing ? "Pause" : "Start");
 };
 
-const numberLabel = (hour: number): SVGTextElement => {
+/** Dress-watch dial: Roman numerals at the quarters only, gold batons mark the other hours. */
+const QUARTERS = [
+  [12, "XII"],
+  [3, "III"],
+  [6, "VI"],
+  [9, "IX"],
+] as const;
+
+const numberLabel = ([hour, numeral]: (typeof QUARTERS)[number]): SVGTextElement => {
   const angle = (hour * Math.PI) / 6;
   const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  label.setAttribute("x", (100 + 72 * Math.sin(angle)).toFixed(1));
-  label.setAttribute("y", (100 - 72 * Math.cos(angle)).toFixed(1));
-  label.setAttribute("class", hour % 3 === 0 ? "big" : "small");
-  label.textContent = String(hour);
+  label.setAttribute("x", (100 + 62 * Math.sin(angle)).toFixed(1));
+  label.setAttribute("y", (100 - 62 * Math.cos(angle)).toFixed(1));
+  label.textContent = numeral;
   return label;
 };
 
+const handAngle = new Map<string, number>();
+
+/** Turns a hand the short way round, so 59 s to 0 s moves forward one tick. */
 const turnHand = (id: string, degrees: number, instant: boolean): void => {
-  const props = {
-    rotation: `${String(degrees)}_short`,
-    svgOrigin: "100 100",
-  };
+  const previous = handAngle.get(id) ?? degrees;
+  const next = previous + ((((degrees - previous) % 360) + 540) % 360) - 180;
+  handAngle.set(id, next);
+  const style = { rotate: `${String(next)}deg` };
   if (instant) {
-    gsap.set(`#${id}`, props);
+    setStyle(`#${id}`, style);
   } else {
-    gsap.to(`#${id}`, { ...props, duration: 0.55, ease: SOFT_EASE });
+    void tween(`#${id}`, style, { from: { rotate: `${String(previous)}deg` }, keep: true });
   }
 };
 
@@ -76,37 +84,26 @@ export const startClock = (timeZone?: string): void => {
 };
 
 const showStyle = (animate: boolean): void => {
-  const duration = animate ? 0.65 : 0;
-  gsap.to("#analog", { opacity: analog ? 1 : 0, duration, ease: SOFT_EASE });
-  gsap.to("#time", {
-    opacity: analog ? 0 : 1,
-    scale: analog ? 0.94 : 1,
-    duration,
-    ease: SOFT_EASE,
-  });
+  const duration = animate ? 650 : 0;
+  void tween("#analog", { opacity: analog ? "1" : "0" }, { duration, keep: true });
+  void tween(
+    "#time",
+    { opacity: analog ? "0" : "1", scale: analog ? "0.94" : "1" },
+    { duration, keep: true },
+  );
   if (animate && analog) {
-    gsap.fromTo(
+    void tween(
       "#numbers text",
-      { opacity: 0, scale: 0.92 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 0.55,
-        stagger: 0.03,
-        ease: SOFT_EASE,
-        transformOrigin: "50% 50%",
-      },
+      { opacity: "1", scale: "1" },
+      { from: { opacity: "0", scale: "0.92" }, stagger: 30 },
     );
   }
-  const button = getElement("style-button", HTMLButtonElement);
-  setIcon(button, analog ? "123" : "clock", analog ? "Digital" : "Analog");
+  setText("style-label", analog ? "Digital" : "Analog");
 };
 
 export const setUpClockStyle = async (): Promise<void> => {
   analog = (await readSetting("clockStyle")) === "analog";
-  getElement("numbers", SVGGElement).replaceChildren(
-    ...Array.from({ length: 12 }, (_, index) => numberLabel(index + 1)),
-  );
+  getElement("numbers", SVGGElement).replaceChildren(...QUARTERS.map(numberLabel));
   showStyle(false);
   getElement("style-button", HTMLButtonElement).addEventListener("click", () => {
     analog = !analog;

@@ -8,113 +8,118 @@
   gap: 0.75rem;
 }
 
+/* Rectangular, hairline, tailored: the main action is the only filled one. */
 .pill {
-  @include panel;
+  @include caps(0.72rem, 0.22em);
 
   display: inline-flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.75rem;
+  min-width: 8.5rem;
   height: 3.25rem;
-  padding: 0 1.4rem;
+  padding: 0 1.5rem;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius);
+  background: transparent;
   color: var(--ink);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
   transition:
-    scale 0.2s,
-    background-color 0.2s,
-    border-color 0.2s;
+    background-color 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    color 0.3s var(--ease);
 
   .bi {
-    font-size: 1.1rem;
-  }
-
-  &:active {
-    scale: 0.97;
+    font-size: 1rem;
   }
 
   @include hover {
-    background: var(--paper);
-    border-color: var(--line-strong);
+    border-color: var(--ink);
+  }
+
+  &:active {
+    background: var(--faint);
   }
 
   &.main {
-    height: 3.75rem;
-    padding: 0 2rem;
+    min-width: 11rem;
     border-color: var(--ink);
     background: var(--ink);
-    color: var(--paper);
-    font-size: 0.95rem;
-    font-weight: 600;
+    color: var(--surface);
 
     @include hover {
-      background: #2a2e36;
-      border-color: #2a2e36;
+      background: #2b2722;
+    }
+
+    &:active {
+      background: #000;
     }
   }
 }
 
 .fields {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-  gap: 1rem;
-  width: min(100%, 30rem);
+  width: min(100%, 10rem);
 }
 
 .field {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.35rem;
   min-width: 0;
 }
 
-.field-control {
-  @include panel;
+.clock-field {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.1em;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 2.25rem;
+  transition: border-color 0.3s var(--ease);
 
-  width: 100%;
-  min-width: 0;
-  min-height: 3rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: var(--radius);
-  color: var(--ink);
-  font: inherit;
-  font-size: 0.85rem;
-  text-align: center;
-  text-align-last: center;
-  transition:
-    border-color 0.2s,
-    background-color 0.2s;
-
-  &:focus {
-    border-color: var(--graphite);
-    outline: none;
-  }
-
-  option {
-    background: var(--surface);
+  &:focus-within {
+    border-color: var(--ink);
   }
 
   @include hover {
-    background: var(--paper);
+    border-color: var(--ink);
   }
+}
+
+.clock-input {
+  width: 1.3em;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+  caret-color: var(--gold);
+
+  &:focus {
+    outline: none;
+    color: var(--gold);
+  }
+}
+
+.clock-colon {
+  color: var(--gold);
 }
 
 .status {
   min-height: 1.5rem;
   color: var(--ink);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   text-wrap: balance;
 }
 
 .laps {
-  @include panel;
-
-  width: min(100%, 22rem);
-  max-height: 40dvh;
+  width: min(100%, 24rem);
+  max-height: 26dvh;
   overflow-y: auto;
   margin: 0;
-  padding: 0.5rem 1.25rem;
-  border-radius: var(--radius);
+  padding: 0;
+  border-top: 1px solid var(--line-strong);
   list-style: none;
   scrollbar-width: thin;
 
@@ -125,23 +130,21 @@
 
 .lap {
   display: flex;
+  gap: 1.5rem;
+  white-space: nowrap;
   justify-content: space-between;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid var(--faint);
-
-  &:last-child {
-    border-bottom: 0;
-  }
+  align-items: baseline;
+  padding: 0.9rem 0.25rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .lap-time {
-  font-size: 1.05rem;
-  font-stretch: 85%;
+  font-size: 1.15rem;
 }
 
 @media (width < 26rem) {
   .controls:has(.main) .pill:not(.main) {
-    justify-content: center;
+    min-width: 0;
     width: 3.25rem;
     padding: 0;
 

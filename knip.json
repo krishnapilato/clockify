@@ -2,5 +2,5 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": ["src/pages/*.ts", "src/styles/main.scss", "src/styles/vendor.css"],
   "project": ["src/**/*.{ts,sass,scss}", "tests/**/*.ts"],
-  "ignoreDependencies": ["@fontsource-variable/archivo", "bootstrap", "bootstrap-icons"]
+  "ignoreDependencies": ["@fontsource-variable/bodoni-moda", "bootstrap-icons"]
 }

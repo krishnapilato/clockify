@@ -5,15 +5,15 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.75rem;
-  min-height: 2.25rem;
+  gap: 1rem;
+  min-height: var(--tap);
 }
 
+/* A short gold rule between weekday and date. */
 .dot {
-  width: 0.2rem;
-  height: 0.2rem;
-  border-radius: 50%;
-  background: var(--graphite);
+  width: 1.5rem;
+  height: 1px;
+  background: var(--gold);
 }
 
 .face {
@@ -29,16 +29,15 @@
   position: relative;
   display: grid;
   justify-items: center;
-  font-size: clamp(6.5rem, min(38vw, 25dvh), 17rem);
-  font-weight: 250;
-  font-stretch: 62%;
-  line-height: 0.8;
-  letter-spacing: -0.02em;
-  padding-inline: 0.45em;
+  font-size: clamp(6.5rem, min(40vw, 25dvh), 17rem);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+  padding-inline: 0.5em;
 
   @media (orientation: landscape) {
     grid-auto-flow: column;
-    column-gap: 0.14em;
+    column-gap: 0.18em;
     font-size: clamp(6rem, min(24vw, 44dvh), 22rem);
   }
 
@@ -57,40 +56,39 @@
 }
 
 .accent-digits {
-  color: var(--graphite);
+  color: var(--gold);
 }
 
 .small-digits {
+  @include caps(0.2em, 0.04em);
+
   position: absolute;
-  bottom: 0.1em;
-  left: calc(100% - 1.95em);
+  bottom: 0.15em;
+  left: calc(100% - 1.9em);
   color: var(--muted);
-  font-size: 0.2em;
-  font-weight: 400;
-  font-stretch: 100%;
   line-height: 1;
 }
 
 .time-input {
-  width: 2.05ch;
-  height: 0.84em;
+  width: 2.1ch;
+  height: 0.86em;
   padding: 0;
   border: 0;
-  border-radius: 0.05em;
+  border-radius: 0;
   background: transparent;
   color: var(--ink);
   font: inherit;
   text-align: center;
-  caret-color: var(--graphite);
-  transition: background-color 0.2s;
+  caret-color: var(--gold);
+  transition: background-color 0.3s var(--ease);
 
   & + & {
-    color: var(--graphite);
+    color: var(--gold);
   }
 
   &:focus {
     outline: none;
-    background-color: rgb(90 101 114 / 10%);
+    background-color: var(--gold-soft);
   }
 
   &[readonly] {
@@ -99,7 +97,7 @@
 
   &:not([readonly]) {
     @include hover {
-      background-color: rgb(22 24 28 / 4%);
+      background-color: var(--faint);
     }
   }
 }
@@ -114,118 +112,154 @@
     width: 32dvh;
   }
 
-  text {
+  #numbers text {
     fill: var(--ink);
     font-family: var(--font);
-    font-size: 17px;
-    font-weight: 300;
-    font-stretch: 70%;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     text-anchor: middle;
     dominant-baseline: central;
-  }
-
-  .small {
-    font-size: 11px;
-    opacity: 0.55;
+    transform-box: fill-box;
+    transform-origin: center;
   }
 }
 
-.analog-face {
-  fill: var(--surface);
-  stroke: var(--line-strong);
-  stroke-width: 1;
+.bezel {
+  fill: none;
+  stroke: url("#bezel");
+  stroke-width: 4;
 }
 
-.ticks {
+.dial {
+  fill: url("#dial");
+  stroke: rgb(20 18 15 / 18%);
+  stroke-width: 0.4;
+}
+
+/* Chemin de fer: a fine minute track between two hairlines. */
+.chapter {
   fill: none;
   stroke: var(--ink);
-  stroke-width: 3;
-  stroke-dasharray: 0.06 0.94;
-  stroke-dashoffset: 0.03;
-  opacity: 0.22;
+  stroke-width: 0.35;
+  opacity: 0.45;
+}
 
-  &.hours {
-    stroke-width: 6;
-    stroke-dasharray: 0.016 0.984;
-    stroke-dashoffset: 0.008;
-    opacity: 0.6;
-  }
+.minutes {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 6;
+  stroke-dasharray: 0.035 0.965;
+  stroke-dashoffset: 0.0175;
+  opacity: 0.55;
+}
+
+/* Applied gold batons at every hour. */
+.batons {
+  fill: none;
+  stroke: url("#bezel");
+  stroke-width: 10;
+  stroke-dasharray: 0.01 0.99;
+  stroke-dashoffset: 0.005;
+}
+
+.signature {
+  fill: var(--gold);
+  font-family: var(--font);
+  font-size: 5.5px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-anchor: middle;
+  text-transform: uppercase;
 }
 
 .hour-hand,
-.minute-hand {
+.minute-hand,
+.second-hand {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+}
+
+/* Dauphine hands: two facets catch the light differently. */
+.facet {
   fill: var(--ink);
 }
 
-.second-hand {
-  fill: var(--graphite);
-  stroke: var(--graphite);
-  stroke-width: 1.2;
+.facet-light {
+  fill: #4a4136;
 }
 
-.pin {
-  fill: var(--graphite);
-  stroke: var(--paper);
-  stroke-width: 1.5;
+.second-hand {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+
+  circle {
+    stroke-width: 1.1;
+  }
+}
+
+.cap {
+  fill: url("#bezel");
+}
+
+.cap-dot {
+  fill: var(--ink);
 }
 
 .local-time {
   min-height: 1rem;
-  letter-spacing: 0.14em;
 }
 
 .progress {
   width: min(78vw, 24rem);
   height: 1px;
   overflow: hidden;
-  background: var(--faint);
+  background: var(--line);
 }
 
 .progress-bar {
   display: block;
   height: 100%;
-  background: var(--graphite);
-  transform: scaleX(0);
+  background: var(--gold);
+  scale: 0 1;
   transform-origin: left;
 }
 
-.ringing .display {
-  color: var(--graphite);
+.ringing .display .digits {
+  color: var(--gold);
 }
 
+/* The country is the page title: centred on its own line, the date sits beneath it. */
 .country {
-  @include panel;
+  @include caps(0.9rem, 0.3em);
 
-  position: relative;
   display: flex;
-  align-items: center;
-  gap: 0.6em;
-  padding: 0.5em 1.1em;
-  border-radius: var(--radius);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  cursor: pointer;
-
-  .bi {
-    font-size: 0.8em;
-  }
+  flex-basis: 100%;
+  justify-content: center;
 
   select {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    opacity: 0;
-    cursor: pointer;
-  }
+    @include select-control;
 
-  &:focus-within {
-    outline: 2px solid var(--graphite);
-    outline-offset: 3px;
-  }
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding-inline: 1.75em;
+    border-bottom: 1px solid transparent;
+    background-position: right 0.25em center;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    line-height: 1;
+    transition: border-color 0.3s var(--ease);
 
-  @include hover {
-    background: var(--paper);
+    &:focus-visible {
+      outline: none;
+      border-color: var(--ink);
+    }
+
+    @include hover {
+      border-color: var(--line-strong);
+    }
   }
 }

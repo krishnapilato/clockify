@@ -3,6 +3,8 @@ import sonarjs from "eslint-plugin-sonarjs";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
+const SCRIPTS = "scripts/*.js";
+
 export default tseslint.config(
   { ignores: ["dist", "coverage", "node_modules"] },
   js.configs.recommended,
@@ -13,7 +15,7 @@ export default tseslint.config(
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
-        projectService: { allowDefaultProject: ["*.config.js"] },
+        projectService: { allowDefaultProject: ["*.config.js", SCRIPTS] },
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -54,7 +56,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ["*.config.js"],
+    files: ["*.config.js", SCRIPTS],
     ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    files: [SCRIPTS],
+    languageOptions: { globals: globals.node },
+    rules: { "@typescript-eslint/explicit-function-return-type": "off" },
   },
 );

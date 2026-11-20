@@ -1,14 +1,17 @@
 :root {
-  --ink: #16181c;
-  --paper: #eef0f2;
-  --surface: #f7f8fa;
-  --muted: rgb(22 24 28 / 55%);
-  --faint: rgb(22 24 28 / 10%);
-  --graphite: #5a6572;
-  --accent: var(--graphite);
-  --line: rgb(22 24 28 / 14%);
-  --line-strong: rgb(22 24 28 / 28%);
-  --radius: 0.35rem;
-  --font: "Archivo Variable", system-ui, sans-serif;
-  --gutter: max(1rem, env(safe-area-inset-left), env(safe-area-inset-right));
+  /* Avorio, inchiostro e oro antico: a fashion-house palette with one restrained accent. */
+  --ink: #14120f;
+  --paper: #f4efe5;
+  --surface: #fbf8f2;
+  --muted: rgb(20 18 15 / 64%);
+  --faint: rgb(20 18 15 / 7%);
+  --line: rgb(20 18 15 / 16%);
+  --line-strong: rgb(20 18 15 / 34%);
+  --gold: #8c6d3f;
+  --gold-soft: rgb(140 109 63 / 14%);
+  --radius: 0;
+  --font: "Bodoni Moda Variable", "Bodoni 72", didot, "Times New Roman", serif;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --gutter: max(1.25rem, env(safe-area-inset-left), env(safe-area-inset-right));
+  --tap: 3rem;
 }

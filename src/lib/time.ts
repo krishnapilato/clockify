@@ -64,3 +64,42 @@ export const countdownLength = (minutesText: string, secondsText: string): numbe
   const total = (Number(minutesText) * 60 + Number(secondsText)) * 1000;
   return Math.min(total, LONGEST_COUNTDOWN);
 };
+
+/** The next moment a "HH:MM" alarm should ring: later today, or tomorrow if that time has passed. */
+export const nextAlarm = (clockTime: string, now: Date): number | undefined => {
+  const match = /^(\d{2}):(\d{2})$/.exec(clockTime);
+  if (match === null) {
+    return undefined;
+  }
+  const alarm = new Date(now);
+  alarm.setHours(Number(match[1]), Number(match[2]), 0, 0);
+  if (alarm.getTime() <= now.getTime()) {
+    alarm.setDate(alarm.getDate() + 1);
+  }
+  return alarm.getTime();
+};
+
+/** The next full hour as "HH:MM", a sensible first suggestion for an alarm. */
+export const nextFullHour = (now: Date): string => `${pad((now.getHours() + 1) % 24)}:00`;
+
+/** The number in a typed field, or `empty` when it holds no digits. */
+export const fieldNumber = (text: string, empty = Number.NaN): number => {
+  const digits = digitsOnly(text);
+  return digits === "" ? empty : Number(digits);
+};
+
+/** Joins typed hours and minutes into "HH:MM", or undefined while either is out of range. */
+export const clockTime = (hoursText: string, minutesText: string): string | undefined => {
+  const hours = fieldNumber(hoursText);
+  const minutes = fieldNumber(minutesText);
+  if (!(hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60)) {
+    return undefined;
+  }
+  return `${pad(hours)}:${pad(minutes)}`;
+};
+
+/** Steps a clock field up or down, wrapping round (23 → 00, 00 → 59). */
+export const stepClockField = (text: string, step: number, limit: number): string => {
+  const value = fieldNumber(text, 0);
+  return pad((((value + step) % limit) + limit) % limit);
+};

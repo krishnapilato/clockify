@@ -2,7 +2,7 @@ import { setPlayButton } from "#lib/dial";
 import { getElement, onClick } from "#lib/dom";
 import { showProgress, showStatus, warn } from "#lib/motion";
 import { startPage } from "#lib/page";
-import { loadRingtone, ring, silence } from "#lib/sound";
+import { ring, silence } from "#lib/sound";
 import { countdownLength, digitsOnly, LONGEST_COUNTDOWN, pad } from "#lib/time";
 import { createTimer } from "#lib/timer";
 
@@ -117,4 +117,3 @@ onClick("minute-button", addMinute);
 
 readCountdown();
 startPage();
-await loadRingtone();

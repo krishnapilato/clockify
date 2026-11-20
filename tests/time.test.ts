@@ -3,10 +3,14 @@ import {
   countdownLength,
   digitsOnly,
   handAngles,
+  clockTime,
   LONGEST_COUNTDOWN,
+  nextAlarm,
+  nextFullHour,
   pad,
   readClock,
   splitDuration,
+  stepClockField,
   timeText,
 } from "#lib/time";
 
@@ -79,5 +83,52 @@ describe("countdownLength", () => {
 
   it("never goes past the longest countdown", () => {
     expect(countdownLength("99", "99")).toBe(LONGEST_COUNTDOWN);
+  });
+});
+
+describe("nextAlarm", () => {
+  const now = new Date(2026, 10, 20, 14, 30, 15);
+
+  it("rings later today when the time is still ahead", () => {
+    expect(nextAlarm("18:05", now)).toBe(new Date(2026, 10, 20, 18, 5).getTime());
+  });
+
+  it("rings tomorrow when the time has already passed", () => {
+    expect(nextAlarm("07:00", now)).toBe(new Date(2026, 10, 21, 7, 0).getTime());
+    expect(nextAlarm("14:30", now)).toBe(new Date(2026, 10, 21, 14, 30).getTime());
+  });
+
+  it("rejects anything that is not HH:MM", () => {
+    expect(nextAlarm("", now)).toBeUndefined();
+    expect(nextAlarm("7:00", now)).toBeUndefined();
+  });
+});
+
+describe("nextFullHour", () => {
+  it("suggests the next full hour and wraps at midnight", () => {
+    expect(nextFullHour(new Date(2026, 10, 20, 14, 30))).toBe("15:00");
+    expect(nextFullHour(new Date(2026, 10, 20, 23, 59))).toBe("00:00");
+  });
+});
+
+describe("clockTime", () => {
+  it("pads valid hours and minutes", () => {
+    expect(clockTime("7", "5")).toBe("07:05");
+    expect(clockTime("23", "59")).toBe("23:59");
+  });
+
+  it("rejects empty or out-of-range fields", () => {
+    expect(clockTime("", "30")).toBeUndefined();
+    expect(clockTime("24", "00")).toBeUndefined();
+    expect(clockTime("12", "60")).toBeUndefined();
+  });
+});
+
+describe("stepClockField", () => {
+  it("steps and wraps round", () => {
+    expect(stepClockField("09", 1, 24)).toBe("10");
+    expect(stepClockField("23", 1, 24)).toBe("00");
+    expect(stepClockField("00", -1, 60)).toBe("59");
+    expect(stepClockField("", 10, 60)).toBe("10");
   });
 });

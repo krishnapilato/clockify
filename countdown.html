@@ -10,29 +10,15 @@
     <meta name="theme-color" content="#eef0f2" />
     <title>Countdown · Clockify</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <style>
-      body {
-        visibility: hidden;
-      }
-    </style>
     <link rel="stylesheet" href="/src/styles/vendor.css" />
     <link rel="stylesheet" href="/src/styles/main.scss" />
     <script type="module" src="/src/pages/countdown.ts"></script>
   </head>
 
-  <body class="is-loading">
-    <div class="loader" id="loader" role="status" aria-live="polite" aria-busy="true">
-      <div class="loader-inner">
-        <p class="loader-brand">Clockify</p>
-        <div class="loader-mark" aria-hidden="true">
-          <span class="loader-ring"></span>
-          <span class="loader-ring-soft"></span>
-          <span class="loader-hand"></span>
-          <span class="loader-pin"></span>
-        </div>
-        <p class="loader-caption">Loading</p>
-      </div>
-    </div>
+  <body>
+    <button class="corner-action" id="fullscreen-button" type="button" aria-pressed="false" hidden>
+      Full screen
+    </button>
     <main class="page">
       <h1 class="visually-hidden">Countdown</h1>
 
@@ -78,40 +64,25 @@
           <span class="pill-text">1 min</span>
         </button>
       </div>
-      <audio id="sound"></audio>
+      <audio id="sound" src="sounds/chime.wav" preload="none"></audio>
     </main>
 
     <nav class="dock" aria-label="Pages">
       <ul class="dock-links">
         <li>
-          <a class="dock-link" href="index.html">
-            <i class="bi bi-clock" aria-hidden="true"></i>
-            <span>Clock</span>
-          </a>
+          <a class="dock-link" href="index.html">Clock</a>
         </li>
         <li>
-          <a class="dock-link" href="clocks.html">
-            <i class="bi bi-globe-americas" aria-hidden="true"></i>
-            <span>World</span>
-          </a>
+          <a class="dock-link" href="clocks.html">World</a>
         </li>
         <li>
-          <a class="dock-link" href="alarm.html">
-            <i class="bi bi-alarm" aria-hidden="true"></i>
-            <span>Alarm</span>
-          </a>
+          <a class="dock-link" href="alarm.html">Alarm</a>
         </li>
         <li>
-          <a class="dock-link" href="stopwatch.html">
-            <i class="bi bi-stopwatch" aria-hidden="true"></i>
-            <span>Stopwatch</span>
-          </a>
+          <a class="dock-link" href="stopwatch.html">Stopwatch</a>
         </li>
         <li>
-          <a class="dock-link" href="countdown.html" aria-current="page">
-            <i class="bi bi-hourglass-split" aria-hidden="true"></i>
-            <span>Timer</span>
-          </a>
+          <a class="dock-link" href="countdown.html" aria-current="page">Timer</a>
         </li>
       </ul>
     </nav>

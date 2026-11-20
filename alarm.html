@@ -10,29 +10,15 @@
     <meta name="theme-color" content="#eef0f2" />
     <title>Alarm · Clockify</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <style>
-      body {
-        visibility: hidden;
-      }
-    </style>
     <link rel="stylesheet" href="/src/styles/vendor.css" />
     <link rel="stylesheet" href="/src/styles/main.scss" />
     <script type="module" src="/src/pages/alarm.ts"></script>
   </head>
 
-  <body class="is-loading">
-    <div class="loader" id="loader" role="status" aria-live="polite" aria-busy="true">
-      <div class="loader-inner">
-        <p class="loader-brand">Clockify</p>
-        <div class="loader-mark" aria-hidden="true">
-          <span class="loader-ring"></span>
-          <span class="loader-ring-soft"></span>
-          <span class="loader-hand"></span>
-          <span class="loader-pin"></span>
-        </div>
-        <p class="loader-caption">Loading</p>
-      </div>
-    </div>
+  <body>
+    <button class="corner-action" id="fullscreen-button" type="button" aria-pressed="false" hidden>
+      Full screen
+    </button>
     <main class="page">
       <h1 class="visually-hidden">Alarm</h1>
 
@@ -48,24 +34,33 @@
         <span class="progress-bar" id="progress"></span>
       </div>
       <div class="fields">
-        <label class="field">
-          <span class="label">Ring at</span>
-          <input class="field-control" id="alarm-time" type="datetime-local" />
-        </label>
-        <label class="field">
-          <span class="label">Ringtone</span>
-          <select class="field-control" id="ringtone">
-            <option value="sounds/classic.mp3">Classic</option>
-            <option value="sounds/chime.wav">Chime</option>
-            <option value="sounds/bells.wav">Bells</option>
-            <option value="sounds/digital.wav">Digital</option>
-            <option value="sounds/pulse.wav">Pulse</option>
-            <option value="sounds/sunrise.wav">Sunrise</option>
-          </select>
-        </label>
+        <div class="field">
+          <span class="label" id="ring-at">Ring at</span>
+          <div class="clock-field" role="group" aria-labelledby="ring-at">
+            <input
+              class="clock-input"
+              id="alarm-hours"
+              type="text"
+              inputmode="numeric"
+              maxlength="2"
+              autocomplete="off"
+              aria-label="Hours"
+            />
+            <span class="clock-colon" aria-hidden="true">:</span>
+            <input
+              class="clock-input"
+              id="alarm-minutes"
+              type="text"
+              inputmode="numeric"
+              maxlength="2"
+              autocomplete="off"
+              aria-label="Minutes"
+            />
+          </div>
+        </div>
       </div>
       <div class="controls">
-        <button class="pill" id="stop-button" type="button">
+        <button class="pill" id="stop-button" type="button" hidden>
           <i class="bi bi-bell-slash" aria-hidden="true"></i>
           <span class="pill-text">Stop</span>
         </button>
@@ -73,46 +68,27 @@
           <i class="bi bi-bell" aria-hidden="true"></i>
           <span class="pill-text">Set alarm</span>
         </button>
-        <button class="pill" id="listen-button" type="button">
-          <i class="bi bi-volume-up" aria-hidden="true"></i>
-          <span class="pill-text">Listen</span>
-        </button>
       </div>
       <p class="status" id="status" role="status"></p>
-      <audio id="sound" loop></audio>
+      <audio id="sound" src="sounds/chime.wav" preload="none" loop></audio>
     </main>
 
     <nav class="dock" aria-label="Pages">
       <ul class="dock-links">
         <li>
-          <a class="dock-link" href="index.html">
-            <i class="bi bi-clock" aria-hidden="true"></i>
-            <span>Clock</span>
-          </a>
+          <a class="dock-link" href="index.html">Clock</a>
         </li>
         <li>
-          <a class="dock-link" href="clocks.html">
-            <i class="bi bi-globe-americas" aria-hidden="true"></i>
-            <span>World</span>
-          </a>
+          <a class="dock-link" href="clocks.html">World</a>
         </li>
         <li>
-          <a class="dock-link" href="alarm.html" aria-current="page">
-            <i class="bi bi-alarm" aria-hidden="true"></i>
-            <span>Alarm</span>
-          </a>
+          <a class="dock-link" href="alarm.html" aria-current="page">Alarm</a>
         </li>
         <li>
-          <a class="dock-link" href="stopwatch.html">
-            <i class="bi bi-stopwatch" aria-hidden="true"></i>
-            <span>Stopwatch</span>
-          </a>
+          <a class="dock-link" href="stopwatch.html">Stopwatch</a>
         </li>
         <li>
-          <a class="dock-link" href="countdown.html">
-            <i class="bi bi-hourglass-split" aria-hidden="true"></i>
-            <span>Timer</span>
-          </a>
+          <a class="dock-link" href="countdown.html">Timer</a>
         </li>
       </ul>
     </nav>

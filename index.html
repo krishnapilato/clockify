@@ -13,29 +13,15 @@
     <meta name="theme-color" content="#eef0f2" />
     <title>Clockify</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <style>
-      body {
-        visibility: hidden;
-      }
-    </style>
     <link rel="stylesheet" href="/src/styles/vendor.css" />
     <link rel="stylesheet" href="/src/styles/main.scss" />
     <script type="module" src="/src/pages/home.ts"></script>
   </head>
 
-  <body class="is-loading">
-    <div class="loader" id="loader" role="status" aria-live="polite" aria-busy="true">
-      <div class="loader-inner">
-        <p class="loader-brand">Clockify</p>
-        <div class="loader-mark" aria-hidden="true">
-          <span class="loader-ring"></span>
-          <span class="loader-ring-soft"></span>
-          <span class="loader-hand"></span>
-          <span class="loader-pin"></span>
-        </div>
-        <p class="loader-caption">Loading</p>
-      </div>
-    </div>
+  <body>
+    <button class="corner-action" id="fullscreen-button" type="button" aria-pressed="false" hidden>
+      Full screen
+    </button>
     <main class="page">
       <h1 class="visually-hidden">Clock</h1>
 
@@ -50,23 +36,45 @@
           <span class="small-digits" id="small-digits">00</span>
         </p>
         <svg class="analog" id="analog" viewBox="0 0 200 200" aria-hidden="true">
-          <circle class="analog-face" cx="100" cy="100" r="98" />
-          <circle class="ticks" cx="100" cy="100" r="90" pathLength="60" />
-          <circle class="ticks hours" cx="100" cy="100" r="90" pathLength="12" />
+          <defs>
+            <linearGradient id="bezel" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d9bf8c" />
+              <stop offset="0.45" stop-color="#8c6d3f" />
+              <stop offset="0.7" stop-color="#c9a96e" />
+              <stop offset="1" stop-color="#6f5530" />
+            </linearGradient>
+            <radialGradient id="dial" cx="0.5" cy="0.42" r="0.6">
+              <stop offset="0" stop-color="#fdfbf6" />
+              <stop offset="1" stop-color="#ece4d4" />
+            </radialGradient>
+          </defs>
+          <circle class="bezel" cx="100" cy="100" r="97" />
+          <circle class="dial" cx="100" cy="100" r="94" />
+          <circle class="chapter" cx="100" cy="100" r="89" />
+          <circle class="chapter" cx="100" cy="100" r="83" />
+          <circle class="minutes" cx="100" cy="100" r="86" pathLength="60" />
+          <circle class="batons" cx="100" cy="100" r="76" pathLength="12" />
           <g id="numbers"></g>
-          <path class="hour-hand" id="hour-hand" d="M100 108 L96 100 L100 54 L104 100 Z" />
-          <path class="minute-hand" id="minute-hand" d="M100 110 L97.5 100 L100 30 L102.5 100 Z" />
-          <g class="second-hand" id="second-hand">
-            <line x1="100" y1="122" x2="100" y2="24" />
-            <circle cx="100" cy="116" r="3" />
+          <text class="signature" x="100" y="134">Clockify</text>
+          <g class="hour-hand" id="hour-hand">
+            <path class="facet" d="M100 50 L95.4 93 L100 109 Z" />
+            <path class="facet-light" d="M100 50 L104.6 93 L100 109 Z" />
           </g>
-          <circle class="pin" cx="100" cy="100" r="3.5" />
+          <g class="minute-hand" id="minute-hand">
+            <path class="facet" d="M100 22 L96.6 92 L100 111 Z" />
+            <path class="facet-light" d="M100 22 L103.4 92 L100 111 Z" />
+          </g>
+          <g class="second-hand" id="second-hand">
+            <line x1="100" y1="128" x2="100" y2="18" />
+            <circle cx="100" cy="120" r="3.4" />
+          </g>
+          <circle class="cap" cx="100" cy="100" r="4.6" />
+          <circle class="cap-dot" cx="100" cy="100" r="1.5" />
         </svg>
       </div>
       <div class="controls">
         <button class="pill" id="style-button" type="button">
-          <i class="bi bi-clock" aria-hidden="true"></i>
-          <span class="pill-text">Analog</span>
+          <span class="pill-text" id="style-label">Analog</span>
         </button>
       </div>
     </main>
@@ -74,34 +82,19 @@
     <nav class="dock" aria-label="Pages">
       <ul class="dock-links">
         <li>
-          <a class="dock-link" href="index.html" aria-current="page">
-            <i class="bi bi-clock" aria-hidden="true"></i>
-            <span>Clock</span>
-          </a>
+          <a class="dock-link" href="index.html" aria-current="page">Clock</a>
         </li>
         <li>
-          <a class="dock-link" href="clocks.html">
-            <i class="bi bi-globe-americas" aria-hidden="true"></i>
-            <span>World</span>
-          </a>
+          <a class="dock-link" href="clocks.html">World</a>
         </li>
         <li>
-          <a class="dock-link" href="alarm.html">
-            <i class="bi bi-alarm" aria-hidden="true"></i>
-            <span>Alarm</span>
-          </a>
+          <a class="dock-link" href="alarm.html">Alarm</a>
         </li>
         <li>
-          <a class="dock-link" href="stopwatch.html">
-            <i class="bi bi-stopwatch" aria-hidden="true"></i>
-            <span>Stopwatch</span>
-          </a>
+          <a class="dock-link" href="stopwatch.html">Stopwatch</a>
         </li>
         <li>
-          <a class="dock-link" href="countdown.html">
-            <i class="bi bi-hourglass-split" aria-hidden="true"></i>
-            <span>Timer</span>
-          </a>
+          <a class="dock-link" href="countdown.html">Timer</a>
         </li>
       </ul>
     </nav>
