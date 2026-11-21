@@ -50,8 +50,6 @@ The language of Italian fashion and fine watchmaking: ivory paper, ink, and one 
 | ---------------------------------------- |
 | ![Timer](docs/screenshots/countdown.jpg) |
 
-<img src="docs/screenshots/mobile.jpg" alt="Clockify on a phone" width="260"> <img src="docs/screenshots/mobile-alarm.jpg" alt="The alarm on a phone" width="260">
-
 ---
 
 ## Features
